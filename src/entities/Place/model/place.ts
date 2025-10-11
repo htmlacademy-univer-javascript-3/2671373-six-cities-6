@@ -1,4 +1,7 @@
-export type TPlaceType = 'Apartment' | 'Room'
+export enum EPlaceType {
+    APARTMENT= 'Apartment',
+    ROOM = 'Room',
+}
 
 export type TPlaceRating = 1 | 2 | 3 | 4 | 5
 
@@ -7,6 +10,6 @@ export type TPlace = {
   title: string;
   img: string;
   price: number;
-  type: TPlaceType;
+  type: EPlaceType;
   rating: TPlaceRating;
 }
