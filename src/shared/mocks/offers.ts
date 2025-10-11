@@ -1,4 +1,4 @@
-import {EOfferType, TOffer} from '../model/offer.ts';
+import {EOfferType, TOffer} from '@/shared/model/offer';
 import {nanoid} from 'nanoid';
 
 export const offersMock: TOffer[] = [

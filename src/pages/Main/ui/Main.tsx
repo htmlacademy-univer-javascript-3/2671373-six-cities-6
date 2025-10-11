@@ -1,4 +1,5 @@
-import {OfferCard, offersMock} from '@/entities/Offer';
+import {OfferCard} from '@/entities/Offer';
+import {offersMock} from '@/shared/mocks';
 import {FC} from 'react';
 
 const MainPage: FC = () => (
