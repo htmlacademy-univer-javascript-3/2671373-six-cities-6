@@ -7,8 +7,8 @@ const routes: RouteObject[] = [
     errorElement: <h1>Error</h1>,
     loader: () => <h1>Loading</h1>,
     async lazy() {
-      const { BaseLayout } = await import('@/app/layout/BaseLayout');
-      return { Component: BaseLayout };
+      const { MainLayout } = await import('@/app/layout/MainLayout');
+      return { Component: MainLayout };
     },
     children: [
       {
@@ -18,13 +18,17 @@ const routes: RouteObject[] = [
           return { Component: MainPage};
         }
       },
-      {
-        path: '/login',
-        async lazy() {
-          const { LoginPage } = await import('@/pages/Login');
-          return { Component: LoginPage };
-        }
-      },
+    ]
+  },
+  {
+    path: '/',
+    errorElement: <h1>Error</h1>,
+    loader: () => <h1>Loading</h1>,
+    async lazy() {
+      const { BaseLayout } = await import('@/app/layout/BaseLayout');
+      return { Component: BaseLayout };
+    },
+    children: [
       {
         path: '/offer/:id',
         async lazy() {
@@ -41,6 +45,20 @@ const routes: RouteObject[] = [
         }
       }
     ]
+  },
+  {
+    path: '/login',
+    errorElement: <h1>Error</h1>,
+    loader: () => <h1>Loading</h1>,
+    children: [
+      {
+        index: true,
+        async lazy() {
+          const {LoginPage} = await import('@/pages/Login');
+          return {Component: LoginPage};
+        }
+      }
+    ],
   },
   {
     path: '*',
