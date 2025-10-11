@@ -1,4 +1,4 @@
-import {PlaceCard, placesMock} from '@/entities/Place';
+import {OfferCard, offersMock} from '@/entities/Offer';
 import {FC} from 'react';
 
 const MainPage: FC = () => (
@@ -63,8 +63,8 @@ const MainPage: FC = () => (
               </ul>
             </form>
             <div className="cities__places-list places__list tabs__content">
-              {placesMock.map((place) => (
-                <PlaceCard place={place} key={place.id} />
+              {offersMock.map((offer) => (
+                <OfferCard offer={offer} key={offer.id} />
               ))}
             </div>
           </section>
