@@ -2,7 +2,7 @@ import {redirect} from 'react-router-dom';
 
 const PrivateRouteLoader = () => {
 
-  const authorized = false;
+  const authorized = true;
 
   if (!authorized) {
     throw redirect('/login');
