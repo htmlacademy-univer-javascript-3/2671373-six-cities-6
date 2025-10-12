@@ -12,4 +12,5 @@ export type TOffer = {
   price: number;
   type: EOfferType;
   rating: TOfferRating;
+  premium: boolean;
 }
