@@ -3,10 +3,14 @@ import {IOfferCard} from './OfferCard.type';
 
 const OfferCard: FC<IOfferCard> = (props) => {
 
-  const { offer } = props;
+  const { offer, selectActiveOfferId } = props;
 
   return (
-    <article className="cities__card place-card">
+    <article
+      className="cities__card place-card" id={offer.id}
+      onMouseEnter={() => selectActiveOfferId(offer.id)}
+      onMouseLeave={() => selectActiveOfferId('')}
+    >
       {offer.premium && (
         <div className="place-card__mark">
           <span>Premium</span>
