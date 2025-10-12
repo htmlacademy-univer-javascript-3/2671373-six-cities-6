@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {IOfferCard} from './OfferCard.type';
+import {Link} from 'react-router-dom';
 
 const OfferCard: FC<IOfferCard> = (props) => {
 
@@ -43,7 +44,7 @@ const OfferCard: FC<IOfferCard> = (props) => {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{offer.title}</a>
+          <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>
