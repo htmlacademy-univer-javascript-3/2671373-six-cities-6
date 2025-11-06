@@ -1,27 +1,9 @@
 import {FC, useEffect, useRef} from 'react';
 import useMap from '../hooks/useMap.ts';
-import {Icon, Marker, layerGroup} from 'leaflet';
-import { City, Points, Point } from '../types';
-import { URL_MARKER_DEFAULT } from '../constants/urls';
+import {Marker, layerGroup} from 'leaflet';
+import { defaultCustomIcon } from '../constants/icons';
 import 'leaflet/dist/leaflet.css';
-
-interface IMap {
-  city: City;
-  points: Points;
-  selectedPoint: Point | undefined;
-}
-
-const defaultCustomIcon = new Icon({
-  iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
-});
-
-// const currentCustomIcon = new Icon({
-//   iconUrl: URL_MARKER_CURRENT,
-//   iconSize: [40, 40],
-//   iconAnchor: [20, 40]
-// });
+import {IMap} from './Map.type.ts';
 
 const Map: FC<IMap> = (props) => {
 

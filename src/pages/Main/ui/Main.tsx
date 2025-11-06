@@ -1,24 +1,13 @@
 import {OffersList} from '@/entities/Offer';
-import {offersMock} from '@/shared/mocks';
-import {FC} from 'react';
-import Map from '@/widgets/Map/ui/Map.tsx';
+import {currentCityMock, offersMock, pointsMock, selectedPointMock} from '@/shared/mocks';
+import {FC, useState} from 'react';
+import {Map} from '@/widgets/Map/ui';
 
 const MainPage: FC = () => {
 
-  const currentCity = {
-    title: 'Amsterdam',
-    lat: 52.3909553943508,
-    lng: 4.85309666406198,
-  };
-
-  const points = [
-    {lat: 52.3909553943508, lng: 4.85309666406198 },
-    {lat: 52.3609553943508, lng: 4.85309666406198 },
-    {lat: 52.3909553943508, lng: 4.929309666406198 },
-    {lat: 52.3809553943508, lng: 4.939309666406198 }
-  ];
-
-  const selectedPoint = {lat: 52.3909553943508, lng: 4.929309666406198 };
+  const [currentCity] = useState(currentCityMock);
+  const [points] = useState(pointsMock);
+  const [selectedPoint] = useState(selectedPointMock);
 
   return (
     <div className="page page--gray page--main">
