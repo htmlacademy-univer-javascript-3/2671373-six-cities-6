@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef} from 'react';
-import useMap from '../hooks/useMap.ts';
+import {useMap} from '../hooks';
 import {Marker, layerGroup} from 'leaflet';
 import { defaultCustomIcon } from '../constants/icons';
 import 'leaflet/dist/leaflet.css';

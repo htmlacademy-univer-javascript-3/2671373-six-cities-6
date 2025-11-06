@@ -1,6 +1,6 @@
 import {useEffect, MutableRefObject, useRef} from 'react';
 import L, {Map} from 'leaflet';
-import { City } from '../types';
+import { City } from '@/shared/model/map';
 
 function useMap(
   containerRef: MutableRefObject<HTMLElement | null>,

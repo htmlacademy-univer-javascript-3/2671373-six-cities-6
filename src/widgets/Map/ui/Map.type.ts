@@ -1,4 +1,4 @@
-import { City, Points, Point } from '../types';
+import { City, Points, Point } from '@/shared/model/map';
 
 export interface IMap {
   city: City;
