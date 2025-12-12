@@ -7,7 +7,7 @@ import {IMap} from './Map.type.ts';
 
 const Map: FC<IMap> = (props) => {
 
-  const { points, selectedPoint, city } = props;
+  const { points, selectedPoint, city, setSelectedPoint } = props;
   const containerRef = useRef(null);
   const map = useMap(containerRef, city);
 
@@ -16,8 +16,8 @@ const Map: FC<IMap> = (props) => {
       const markerLayer = layerGroup().addTo(map.current);
       points.forEach((point) => {
         const marker = new Marker({
-          lat: point.lat,
-          lng: point.lng
+          lat: point.latitude,
+          lng: point.longitude
         });
 
         marker
@@ -27,6 +27,7 @@ const Map: FC<IMap> = (props) => {
           //     : defaultCustomIcon
           // )
           .setIcon(defaultCustomIcon)
+          .addEventListener('click', () => setSelectedPoint(point))
           .addTo(markerLayer);
       });
 

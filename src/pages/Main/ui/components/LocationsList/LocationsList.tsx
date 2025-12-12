@@ -17,7 +17,7 @@ const LocationsList: FC<ILocationsList> = (props) => {
         <ul className="locations__list tabs__list">
           {locations.map((location) => (
             <li className="locations__item" key={location}>
-              <Link className={classNames('locations__item-link tabs__item', active === location && 'tabs__item--active')} to={`?location=${location}`}>
+              <Link className={classNames('locations__item-link tabs__item', active === location && 'tabs__item--active')} to={`?city=${location}`}>
                 <span>{location}</span>
               </Link>
             </li>

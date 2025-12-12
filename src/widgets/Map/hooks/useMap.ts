@@ -1,10 +1,10 @@
 import {useEffect, MutableRefObject, useRef} from 'react';
 import L, {Map} from 'leaflet';
-import { City } from '@/shared/model/map';
+import {TCity} from '@/shared/model/offer';
 
 function useMap(
   containerRef: MutableRefObject<HTMLElement | null>,
-  city: City
+  city: TCity
 ): MutableRefObject<Map | null> {
 
   const mapRef = useRef<Map | null>(null);
@@ -21,8 +21,8 @@ function useMap(
 
     const map = L.map(containerRef.current, {
       center: {
-        lat: city.lat,
-        lng: city.lng
+        lat: city.location.latitude,
+        lng: city.location.longitude
       },
       zoom: 9,
       attributionControl: true,
