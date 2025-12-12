@@ -1,70 +1,44 @@
 import {OffersList} from '@/entities/Offer';
-import {offersMock} from '@/shared/mocks';
-import {FC} from 'react';
-import Map from '@/widgets/Map/ui/Map.tsx';
+import {locations, locationsCoords, pointsMock, selectedPointMock} from '@/shared/mocks';
+import {FC, useEffect, useState} from 'react';
+import {Map} from '@/widgets/Map/ui';
+import {LocationsList} from './components/LocationsList';
+import {useSearchParams} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {getOffersListByLocation, RootState, useAppDispatch} from '@/shared/store';
 
 const MainPage: FC = () => {
 
-  const currentCity = {
-    title: 'Amsterdam',
-    lat: 52.3909553943508,
-    lng: 4.85309666406198,
-  };
+  const [searchParams] = useSearchParams();
 
-  const points = [
-    {lat: 52.3909553943508, lng: 4.85309666406198 },
-    {lat: 52.3609553943508, lng: 4.85309666406198 },
-    {lat: 52.3909553943508, lng: 4.929309666406198 },
-    {lat: 52.3809553943508, lng: 4.939309666406198 }
-  ];
+  const dispatch = useAppDispatch();
+  const { offers } = useSelector((state: RootState) => state.offers);
 
-  const selectedPoint = {lat: 52.3909553943508, lng: 4.929309666406198 };
+  const [activeLocation, setActiveLocation] = useState(searchParams.get('location') || locations[0]);
+  const [points] = useState(pointsMock);
+  const [selectedPoint] = useState(selectedPointMock);
+
+  useEffect(() => {
+    const location = searchParams.get('location');
+    if (location) {
+      setActiveLocation(location);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    dispatch(getOffersListByLocation(activeLocation));
+  }, [activeLocation, dispatch]);
 
   return (
     <div className="page page--gray page--main">
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
-          </section>
-        </div>
+        <LocationsList locations={locations} active={activeLocation}/>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
+              <b className="places__found">{offers.length} places to stay in Amsterdam</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -80,10 +54,10 @@ const MainPage: FC = () => {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersList offers={offersMock}/>
+              <OffersList offers={offers}/>
             </section>
             <div className="cities__right-section">
-              <Map city={currentCity} points={points} selectedPoint={selectedPoint}/>
+              <Map city={locationsCoords[activeLocation]} points={points} selectedPoint={selectedPoint}/>
             </div>
           </div>
         </div>
