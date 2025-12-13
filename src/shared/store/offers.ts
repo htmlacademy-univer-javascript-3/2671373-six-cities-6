@@ -6,6 +6,7 @@ type TOffersState = {
   isLoading: boolean;
   error?: string;
   offers: TOffer[];
+  favorites: Record<string, TOffer[]>;
 }
 
 export const getOffersList = createAsyncThunk(
@@ -16,9 +17,24 @@ export const getOffersList = createAsyncThunk(
   }
 );
 
+export const getFavoriteOffersList = createAsyncThunk(
+  'offers/getFavoriteOffersList',
+  async () => {
+    const { data } = await api.get<TOffer[]>(apiRoute.favorite);
+    return data.reduce((acc, curr) => {
+      if (!acc[curr.city.name]) {
+        acc[curr.city.name] = [];
+      }
+      acc[curr.city.name].push(curr);
+      return acc;
+    }, {} as Record<string, TOffer[]>);
+  }
+);
+
 const initialState = {
   isLoading: false,
-  offers: []
+  offers: [],
+  favorites: {},
 } as TOffersState;
 
 export const offersSlice = createSlice({
@@ -27,15 +43,26 @@ export const offersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getOffersList.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.offers = action.payload;
-      } else {
-        state.error = 'error while getting offers';
-      }
+      state.offers = action.payload;
       state.isLoading = false;
     });
     builder.addCase(getOffersList.pending, (state) => {
       state.isLoading = true;
+    });
+    builder.addCase(getOffersList.rejected, (state) => {
+      state.error = 'error while getting offers';
+      state.isLoading = false;
+    });
+    builder.addCase(getFavoriteOffersList.fulfilled, (state, action) => {
+      state.favorites = action.payload;
+      state.isLoading = false;
+    });
+    builder.addCase(getFavoriteOffersList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getFavoriteOffersList.rejected, (state) => {
+      state.error = 'error while getting favorite offers';
+      state.isLoading = false;
     });
   }
 });
