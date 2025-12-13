@@ -1,11 +1,10 @@
 import {RouteObject} from 'react-router-dom';
-import {PrivateRouteLoader} from '@/app/router/loader';
+import {privateRouteLoader} from '@/app/router/loader';
 
 const routes: RouteObject[] = [
   {
     path: '/',
     errorElement: <h1>Error</h1>,
-    loader: () => <h1>Loading</h1>,
     async lazy() {
       const { MainLayout } = await import('@/app/layout/MainLayout');
       return { Component: MainLayout };
@@ -22,8 +21,7 @@ const routes: RouteObject[] = [
   },
   {
     path: '/',
-    errorElement: <h1>Error</h1>,
-    loader: () => <h1>Loading</h1>,
+    // errorElement: <h1>Error</h1>,
     async lazy() {
       const { BaseLayout } = await import('@/app/layout/BaseLayout');
       return { Component: BaseLayout };
@@ -38,7 +36,7 @@ const routes: RouteObject[] = [
       },
       {
         path: '/favorites',
-        loader: PrivateRouteLoader,
+        loader: privateRouteLoader,
         async lazy() {
           const { FavoritesPage } = await import('@/pages/Favorites');
           return { Component: FavoritesPage };
@@ -49,7 +47,6 @@ const routes: RouteObject[] = [
   {
     path: '/login',
     errorElement: <h1>Error</h1>,
-    loader: () => <h1>Loading</h1>,
     children: [
       {
         index: true,

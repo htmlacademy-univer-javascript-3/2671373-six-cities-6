@@ -1,10 +1,12 @@
 import {configureStore, } from '@reduxjs/toolkit';
 import {offersReducer} from './offers.ts';
 import {useDispatch} from 'react-redux';
+import {authReducer} from './auth.ts';
 
 export const rootStore = configureStore({
   reducer: {
-    offers: offersReducer
+    offers: offersReducer,
+    auth: authReducer,
   }
 });
 

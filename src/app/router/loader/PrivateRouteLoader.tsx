@@ -1,14 +1,15 @@
 import {redirect} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-const PrivateRouteLoader = () => {
+const privateRouteLoader = () => {
 
-  const authorized = true;
+  const token = Cookies.get('token');
 
-  if (!authorized) {
+  if (!token) {
     throw redirect('/login');
   }
 
   return null;
 };
 
-export default PrivateRouteLoader;
+export default privateRouteLoader;

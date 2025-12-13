@@ -1,1 +1,1 @@
-export {default as PrivateRouteLoader} from './PrivateRouteLoader';
+export {default as privateRouteLoader} from './PrivateRouteLoader';

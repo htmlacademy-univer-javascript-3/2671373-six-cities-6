@@ -1,4 +1,7 @@
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {RootState, useAppDispatch} from '@/shared/store';
+import {logout} from '@/shared/store/auth.ts';
 
 const HeaderNavNotLogged = () => (
   <nav className="header__nav">
@@ -14,29 +17,39 @@ const HeaderNavNotLogged = () => (
   </nav>
 );
 
-const HeaderNavLogged = () => (
-  <nav className="header__nav">
-    <ul className="header__nav-list">
-      <li className="header__nav-item user">
-        <Link className="header__nav-link header__nav-link--profile" to='/favorites'>
-          <div className="header__avatar-wrapper user__avatar-wrapper">
-          </div>
-          <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-          <span className="header__favorite-count">3</span>
-        </Link>
-      </li>
-      <li className="header__nav-item">
-        <a className="header__nav-link" href="#">
-          <span className="header__signout">Sign out</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
-);
+const HeaderNavLogged = () => {
+
+  const { profile } = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    dispatch(logout()).then(() => navigate('/login'));
+  };
+
+  return (
+    <nav className="header__nav">
+      <ul className="header__nav-list">
+        <li className="header__nav-item user">
+          <Link className="header__nav-link header__nav-link--profile" to='/favorites'>
+            <div className="header__avatar-wrapper user__avatar-wrapper">
+            </div>
+            <span className="header__user-name user__name">{profile?.email}</span>
+            <span className="header__favorite-count">3</span>
+          </Link>
+        </li>
+        <li className="header__nav-item">
+          <a className="header__nav-link" href="#" onClick={logoutHandler}>
+            <span className="header__signout">Sign out</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  );
+};
 
 const Header = () => {
-  // TODO replace with context
-  const isLogged = true;
+  const { authorizationStatus } = useSelector((state: RootState) => state.auth);
 
   return (
     (
@@ -48,7 +61,7 @@ const Header = () => {
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
               </Link>
             </div>
-            {isLogged ? <HeaderNavLogged/> : <HeaderNavNotLogged/>}
+            {authorizationStatus ? <HeaderNavLogged/> : <HeaderNavNotLogged/>}
           </div>
         </div>
       </header>
