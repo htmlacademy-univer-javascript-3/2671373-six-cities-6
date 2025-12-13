@@ -13,8 +13,6 @@ const FavoritesPage: FC = () => {
     dispatch(getFavoriteOffersList());
   }, [dispatch]);
 
-  console.log(favorites);
-
   return (
     <div className="page">
 

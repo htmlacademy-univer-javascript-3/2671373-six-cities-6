@@ -5,7 +5,7 @@ import {apiRoute, api} from '@/shared/store/api';
 type TOffersState = {
   isLoading: boolean;
   error?: string;
-  offers: TOffer[];
+  offers: Record<string, TOffer[]>;
   favorites: Record<string, TOffer[]>;
 }
 
@@ -13,7 +13,13 @@ export const getOffersList = createAsyncThunk(
   'offers/getOffersListByLocation',
   async () => {
     const { data } = await api.get<TOffer[]>(apiRoute.offers);
-    return data;
+    return data.reduce((acc, curr) => {
+      if (!acc[curr.city.name]) {
+        acc[curr.city.name] = [];
+      }
+      acc[curr.city.name].push(curr);
+      return acc;
+    }, {} as Record<string, TOffer[]>);
   }
 );
 
@@ -33,7 +39,7 @@ export const getFavoriteOffersList = createAsyncThunk(
 
 const initialState = {
   isLoading: false,
-  offers: [],
+  offers: {},
   favorites: {},
 } as TOffersState;
 

@@ -30,9 +30,8 @@ const MainPage: FC = () => {
     dispatch(getOffersList());
   }, [activeCity, dispatch]);
 
-  const filteredOffers = useMemo(() => offers.filter((offer) => offer.city.name === activeCity), [offers, activeCity]);
+  const filteredOffers = useMemo(() => offers[activeCity] || [], [offers, activeCity]);
   const offerLocations = useMemo(() => filteredOffers.map((offer) => offer.location), [filteredOffers]);
-  const selectedCity = useMemo(() => filteredOffers?.[0]?.city || citiesCoords[activeCity], [filteredOffers, activeCity]);
 
   return (
     <div className="page page--gray page--main">
@@ -47,7 +46,7 @@ const MainPage: FC = () => {
                 <div className="cities__places-container container">
                   <section className="cities__places places">
                     <h2 className="visually-hidden">Places</h2>
-                    <b className="places__found">{offers.length} places to stay in Amsterdam</b>
+                    <b className="places__found">{filteredOffers.length} places to stay in {activeCity}</b>
                     <form className="places__sorting" action="#" method="get">
                       <span className="places__sorting-caption">Sort by</span>
                       <span className="places__sorting-type" tabIndex={0}>
@@ -67,7 +66,7 @@ const MainPage: FC = () => {
                   </section>
                   <div className="cities__right-section">
                     <Map
-                      city={selectedCity}
+                      city={citiesCoords[activeCity]}
                       points={offerLocations}
                       selectedPoint={selectedPoint}
                       setSelectedPoint={setSelectedPoint}
