@@ -3,7 +3,7 @@ import {RootState} from '@/shared/store';
 import {FC} from 'react';
 import {ClipLoader} from 'react-spinners';
 import {Rating} from '@/shared/ui/Rating';
-import * as classNames from 'classnames';
+import BookmarkButton from '@/shared/ui/BookmarkButton/BookmarkButton.tsx';
 
 interface INearOffers {
   offerId: string;
@@ -40,19 +40,7 @@ const NearOffers: FC<INearOffers> = () => {
                         <b className="place-card__price-value">&euro;{offer.price}</b>
                         <span className="place-card__price-text">&#47;&nbsp;night</span>
                       </div>
-                      <button
-                        className={classNames(
-                          'place-card__bookmark-button',
-                          offer.isFavorite && 'place-card__bookmark-button--active',
-                          'button'
-                        )}
-                        type="button"
-                      >
-                        <svg className="place-card__bookmark-icon" width="18" height="19">
-                          <use xlinkHref="#icon-bookmark"></use>
-                        </svg>
-                        <span className="visually-hidden">{offer.isFavorite ? 'In' : 'To'} bookmarks</span>
-                      </button>
+                      <BookmarkButton active={offer?.isFavorite} />
                     </div>
                     <Rating rating={offer.rating}/>
                     <h2 className="place-card__name">
