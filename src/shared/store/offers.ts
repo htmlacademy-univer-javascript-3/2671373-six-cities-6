@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {TOffer} from '@/shared/model/offer';
+import {TOffer, TOfferCard} from '@/shared/model/offer';
 import {apiRoute, api} from '@/shared/store/api';
 
 type TOffersState = {
@@ -7,7 +7,27 @@ type TOffersState = {
   error?: string;
   offers: Record<string, TOffer[]>;
   favorites: Record<string, TOffer[]>;
+  currentOffer?: TOfferCard;
+  isNearLoading: boolean;
+  nearError?: string;
+  nearOffers: TOffer[];
 }
+
+export const getOfferById = createAsyncThunk(
+  'offers/getOfferById',
+  async (id: string) => {
+    const { data } = await api.get<TOfferCard>(`${apiRoute.offers}/${id}`);
+    return data;
+  }
+);
+
+export const getNearOffers = createAsyncThunk(
+  'offers/getNearOffers',
+  async (id: string) => {
+    const { data } = await api.get<TOffer[]>(`${apiRoute.offers}/${id}/nearby`);
+    return data;
+  }
+);
 
 export const getOffersList = createAsyncThunk(
   'offers/getOffersListByLocation',
@@ -41,6 +61,8 @@ const initialState = {
   isLoading: false,
   offers: {},
   favorites: {},
+  isNearLoading: false,
+  nearOffers: [],
 } as TOffersState;
 
 export const offersSlice = createSlice({
@@ -54,6 +76,7 @@ export const offersSlice = createSlice({
     });
     builder.addCase(getOffersList.pending, (state) => {
       state.isLoading = true;
+      state.error = undefined;
     });
     builder.addCase(getOffersList.rejected, (state) => {
       state.error = 'error while getting offers';
@@ -65,10 +88,35 @@ export const offersSlice = createSlice({
     });
     builder.addCase(getFavoriteOffersList.pending, (state) => {
       state.isLoading = true;
+      state.error = undefined;
     });
     builder.addCase(getFavoriteOffersList.rejected, (state) => {
       state.error = 'error while getting favorite offers';
       state.isLoading = false;
+    });
+    builder.addCase(getOfferById.fulfilled, (state, action) => {
+      state.currentOffer = action.payload;
+      state.isLoading = false;
+    });
+    builder.addCase(getOfferById.pending, (state) => {
+      state.isLoading = true;
+      state.error = undefined;
+    });
+    builder.addCase(getOfferById.rejected, (state) => {
+      state.error = 'error while getting offer';
+      state.isLoading = false;
+    });
+    builder.addCase(getNearOffers.fulfilled, (state, action) => {
+      state.nearOffers = action.payload;
+      state.isNearLoading = false;
+    });
+    builder.addCase(getNearOffers.pending, (state) => {
+      state.isNearLoading = true;
+      state.nearError = undefined;
+    });
+    builder.addCase(getNearOffers.rejected, (state) => {
+      state.nearError = 'error while getting nearby offers';
+      state.isNearLoading = false;
     });
   }
 });

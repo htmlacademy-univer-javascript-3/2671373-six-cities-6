@@ -9,6 +9,12 @@ export type TCity = {
   location: TLocation;
 }
 
+export type TOfferHost = {
+  name: string;
+  avatarUrl: string;
+  isPro: boolean;
+};
+
 export enum EOfferType {
   APARTMENT = 'apartment',
   ROOM = 'room',
@@ -33,3 +39,21 @@ export type TOffer = {
   rating: TOfferRating;
   previewImage: string;
 };
+
+export type TOfferCard = {
+  id: string;
+  title: string;
+  type: string;
+  price: number;
+  city: TCity;
+  location: TLocation;
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
+  description: string;
+  bedrooms: number;
+  goods: string[];
+  host: TOfferHost;
+  images: string[];
+  maxAdults: number;
+}
