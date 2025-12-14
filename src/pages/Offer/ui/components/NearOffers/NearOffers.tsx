@@ -1,9 +1,8 @@
 import {useSelector} from 'react-redux';
-import {RootState} from '@/shared/store';
+import {changeOfferFavoriteStatus, RootState, useAppDispatch} from '@/shared/store';
 import {FC} from 'react';
 import {ClipLoader} from 'react-spinners';
-import {Rating} from '@/shared/ui/Rating';
-import BookmarkButton from '@/shared/ui/BookmarkButton/BookmarkButton.tsx';
+import {OffersList} from '@/entities/Offer';
 
 interface INearOffers {
   offerId: string;
@@ -13,6 +12,12 @@ const NearOffers: FC<INearOffers> = () => {
 
   const {nearOffers, isNearLoading} = useSelector((state: RootState) => state.offers);
 
+  const dispatch = useAppDispatch();
+
+  const handleChangeOfferFavoriteStatus = async (id: string, favorite: boolean) => {
+    await dispatch(changeOfferFavoriteStatus({id, favorite}));
+  };
+
   return (
     <div className="container">
       <section className="near-places places">
@@ -21,35 +26,10 @@ const NearOffers: FC<INearOffers> = () => {
           ? <ClipLoader cssOverride={{margin: '0 auto'}} loading size={150}/>
           : (
             <div className="near-places__list places__list">
-              {nearOffers.map((offer) => (
-                <article className="near-places__card place-card" key={offer.id}>
-                  <div className="near-places__image-wrapper place-card__image-wrapper">
-                    <a href="#">
-                      <img
-                        className="place-card__image"
-                        src={offer.previewImage}
-                        width="260"
-                        height="200"
-                        alt="Place image"
-                      />
-                    </a>
-                  </div>
-                  <div className="place-card__info">
-                    <div className="place-card__price-wrapper">
-                      <div className="place-card__price">
-                        <b className="place-card__price-value">&euro;{offer.price}</b>
-                        <span className="place-card__price-text">&#47;&nbsp;night</span>
-                      </div>
-                      <BookmarkButton active={offer?.isFavorite} />
-                    </div>
-                    <Rating rating={offer.rating}/>
-                    <h2 className="place-card__name">
-                      <a href="#">{offer.title}</a>
-                    </h2>
-                    <p className="place-card__type">{offer.type}</p>
-                  </div>
-                </article>
-              ))}
+              <OffersList
+                offers={nearOffers}
+                changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+              />
             </div>
           )}
       </section>

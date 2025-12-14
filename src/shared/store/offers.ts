@@ -13,6 +13,14 @@ type TOffersState = {
   nearOffers: TOffer[];
 }
 
+export const changeOfferFavoriteStatus = createAsyncThunk(
+  'offers/changeOfferFavoriteStatus',
+  async ({id, favorite}:{id: string; favorite: boolean}) => {
+    const {data} = await api.post<TOffer>(`${apiRoute.favorite}/${id}/${favorite ? 1 : 0}`);
+    return data;
+  }
+);
+
 export const getOfferById = createAsyncThunk(
   'offers/getOfferById',
   async (id: string) => {
@@ -118,6 +126,9 @@ export const offersSlice = createSlice({
       state.nearError = 'error while getting nearby offers';
       state.isNearLoading = false;
     });
+    // builder.addCase(changeOfferFavoriteStatus.rejected, () => {});
+    // builder.addCase(changeOfferFavoriteStatus.pending, () => {});
+    // builder.addCase(changeOfferFavoriteStatus.rejected, () => {});
   }
 });
 

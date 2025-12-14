@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
 import {OffersList} from '@/entities/Offer';
-import {getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
+import {changeOfferFavoriteStatus, getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
 import {useSelector} from 'react-redux';
 import {ClipLoader} from 'react-spinners';
 
@@ -12,6 +12,11 @@ const FavoritesPage: FC = () => {
   useEffect(() => {
     dispatch(getFavoriteOffersList());
   }, [dispatch]);
+
+  const handleChangeOfferFavoriteStatus = async (id: string, favorite: boolean) => {
+    await dispatch(changeOfferFavoriteStatus({id, favorite}));
+    await dispatch(getFavoriteOffersList());
+  };
 
   return (
     <div className="page">
@@ -33,7 +38,12 @@ const FavoritesPage: FC = () => {
                           </a>
                         </div>
                       </div>
-                      <OffersList offers={offers}/>
+                      <div className="cities__places-list places__list tabs__content">
+                        <OffersList
+                          offers={offers}
+                          changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                        />
+                      </div>
                     </li>
                   ))}
                 </ul>

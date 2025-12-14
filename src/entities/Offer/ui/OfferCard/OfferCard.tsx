@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {IOfferCard} from './OfferCard.type';
 import {Link} from 'react-router-dom';
 import {BookmarkButton} from '@/shared/ui/BookmarkButton';
@@ -6,7 +6,14 @@ import {Rating} from '@/shared/ui/Rating';
 
 const OfferCard: FC<IOfferCard> = (props) => {
 
-  const { offer, selectActiveOfferId } = props;
+  const { offer, selectActiveOfferId, changeFavoriteStatus } = props;
+  const [isFavorite, setFavorite] = useState(offer.isFavorite);
+
+  const handleChangeFavorite = () => {
+    changeFavoriteStatus(offer.id, !isFavorite).then(() => {
+      setFavorite(!isFavorite);
+    });
+  };
 
   return (
     <article
@@ -30,7 +37,7 @@ const OfferCard: FC<IOfferCard> = (props) => {
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <BookmarkButton active={offer.isFavorite}/>
+          <BookmarkButton active={isFavorite} onClick={handleChangeFavorite}/>
         </div>
         <Rating rating={offer.rating} />
         <h2 className="place-card__name">

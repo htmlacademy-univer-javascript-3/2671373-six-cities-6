@@ -5,7 +5,7 @@ import {Map} from '@/widgets/Map/ui';
 import {LocationsList} from './components/LocationsList';
 import {useSearchParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {RootState, useAppDispatch, getOffersList} from '@/shared/store';
+import {RootState, useAppDispatch, getOffersList, changeOfferFavoriteStatus} from '@/shared/store';
 import {TLocation} from '@/shared/model/offer';
 import { ClipLoader } from 'react-spinners';
 
@@ -29,6 +29,10 @@ const MainPage: FC = () => {
   useEffect(() => {
     dispatch(getOffersList());
   }, [activeCity, dispatch]);
+
+  const handleChangeOfferFavoriteStatus = async (id: string, favorite: boolean) => {
+    await dispatch(changeOfferFavoriteStatus({id, favorite}));
+  };
 
   const filteredOffers = useMemo(() => offers[activeCity] || [], [offers, activeCity]);
   const offerLocations = useMemo(() => filteredOffers.map((offer) => offer.location), [filteredOffers]);
@@ -62,7 +66,12 @@ const MainPage: FC = () => {
                         <li className="places__option" tabIndex={0}>Top rated first</li>
                       </ul>
                     </form>
-                    <OffersList offers={filteredOffers}/>
+                    <div className="cities__places-list places__list tabs__content">
+                      <OffersList
+                        offers={filteredOffers}
+                        changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                      />
+                    </div>
                   </section>
                   <div className="cities__right-section">
                     <Map
