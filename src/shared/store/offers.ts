@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {TOffer, TOfferCard} from '@/shared/model/offer';
 import {apiRoute, api} from '@/shared/store/api';
+import {AxiosError} from 'axios';
 
 type TOffersState = {
   isLoading: boolean;
@@ -23,9 +24,13 @@ export const changeOfferFavoriteStatus = createAsyncThunk(
 
 export const getOfferById = createAsyncThunk(
   'offers/getOfferById',
-  async (id: string) => {
-    const { data } = await api.get<TOfferCard>(`${apiRoute.offers}/${id}`);
-    return data;
+  async (id: string, thunkAPI) => {
+    try {
+      const { data } = await api.get<TOfferCard>(`${apiRoute.offers}/${id}`);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue((error as AxiosError).response);
+    }
   }
 );
 

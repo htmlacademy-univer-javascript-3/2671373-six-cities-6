@@ -2,24 +2,33 @@ import {FC, useEffect} from 'react';
 import {AddReviewForm} from '@/features/add-review/ui/AddReviewForm';
 import {useSelector} from 'react-redux';
 import {getOfferById, RootState, useAppDispatch, getNearOffers} from '@/shared/store';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {ClipLoader} from 'react-spinners';
 import {Map} from '@/widgets/Map/ui';
 import {NearOffers} from './components/NearOffers';
+import {AxiosResponse} from 'axios';
 
 const OfferPage: FC = () => {
 
   const params = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const {currentOffer, isLoading} = useSelector((state: RootState) => state.offers);
 
   useEffect(() => {
     if (!params.id) {
       return;
     }
-    dispatch(getOfferById(params.id));
+    dispatch(getOfferById(params.id)).then((r) => {
+      const payload = r.payload as AxiosResponse;
+      if ('status' in payload) {
+        if (payload.status === 404) {
+          navigate('/404');
+        }
+      }
+    });
     dispatch(getNearOffers(params.id));
-  }, [params.id, dispatch]);
+  }, [params.id, dispatch, navigate]);
 
   return (
     <div className="page">
