@@ -1,6 +1,14 @@
 import {FC, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {getOfferById, RootState, useAppDispatch, getNearOffers, getComments, sendComment} from '@/shared/store';
+import {
+  getOfferById,
+  RootState,
+  useAppDispatch,
+  getNearOffers,
+  getComments,
+  sendComment,
+  changeOfferFavoriteStatus, getFavoriteOffersList
+} from '@/shared/store';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Map} from '@/widgets/Map/ui';
 import {NearOffers} from './components/NearOffers';
@@ -13,7 +21,7 @@ const OfferPage: FC = () => {
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {currentOffer, isLoading} = useSelector((state: RootState) => state.offers);
+  const {currentOffer, isLoading, nearOffers, isNearLoading} = useSelector((state: RootState) => state.offers);
   const {comments, isLoading: isCommentsLoading} = useSelector((state: RootState) => state.comments);
 
   const sendCommentHandler = (comment: string, rating: number) => {
@@ -23,6 +31,15 @@ const OfferPage: FC = () => {
     dispatch(sendComment({id: params.id, comment, rating})).then(() => {
       dispatch(getComments(params.id as string));
     });
+  };
+
+  const changeOfferFavoriteStatusHandler = async (id: string, favorite: boolean) => {
+    const response = await dispatch(changeOfferFavoriteStatus({id, favorite}));
+    const payload = response.payload as AxiosResponse;
+    if ('status' in payload && payload.status === 401) {
+      navigate('/login');
+    }
+    await dispatch(getFavoriteOffersList());
   };
 
   useEffect(() => {
@@ -138,8 +155,11 @@ const OfferPage: FC = () => {
               )}
             </section>
           </section>
-          {/*TODO make stupid component*/}
-          {!!params.id && (<NearOffers offerId={params.id}/>)}
+          <NearOffers
+            isLoading={isNearLoading}
+            offers={nearOffers}
+            changeOfferFavoriteStatus={changeOfferFavoriteStatusHandler}
+          />
         </LoadingWrapper>
       </main>
     </div>
