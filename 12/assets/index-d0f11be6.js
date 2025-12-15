@@ -1,0 +1,1 @@
+import{j as s,O as a}from"./index-fb074e3b.js";import{H as t}from"./Header-8f934481.js";import"./selectOfferPageData-c25f1342.js";const o=()=>s.jsxs("div",{className:"page",children:[s.jsx(t,{}),s.jsx(a,{})]}),i=o;export{i as BaseLayout};
