@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {AddReviewForm} from '@/features/add-review/ui/AddReviewForm';
 import {useSelector} from 'react-redux';
-import {getOfferById, RootState, useAppDispatch, getNearOffers} from '@/shared/store';
+import {getOfferById, RootState, useAppDispatch, getNearOffers, getComments} from '@/shared/store';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Map} from '@/widgets/Map/ui';
 import {NearOffers} from './components/NearOffers';
@@ -13,7 +13,7 @@ const OfferPage: FC = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {currentOffer, isLoading} = useSelector((state: RootState) => state.offers);
+  const {currentOffer, isLoading, comments} = useSelector((state: RootState) => state.offers);
 
   useEffect(() => {
     if (!params.id) {
@@ -28,6 +28,7 @@ const OfferPage: FC = () => {
       }
     });
     dispatch(getNearOffers(params.id));
+    dispatch(getComments(params.id));
   }, [params.id, dispatch, navigate]);
 
   return (
@@ -115,38 +116,38 @@ const OfferPage: FC = () => {
                   </div>
                 </div>
                 <section className="offer__reviews reviews">
-                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
+                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
                   <ul className="reviews__list">
-                    <li className="reviews__item">
-                      <div className="reviews__user user">
-                        <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                          <img className="reviews__avatar user__avatar" src="img/avatar-max.jpg" width="54"
-                            height="54"
-                            alt="Reviews avatar"
-                          />
-                        </div>
-                        <span className="reviews__user-name">
-                        Max
-                        </span>
-                      </div>
-                      <div className="reviews__info">
-                        <div className="reviews__rating rating">
-                          <div className="reviews__stars rating__stars">
-                            <span style={{width: '80%'}}></span>
-                            <span className="visually-hidden">Rating</span>
+                    {comments.map((comment) => (
+                      <li className="reviews__item" key={comment.id}>
+                        <div className="reviews__user user">
+                          <div className="reviews__avatar-wrapper user__avatar-wrapper">
+                            <img
+                              className="reviews__avatar user__avatar"
+                              src={comment.user.avatarUrl}
+                              width="54"
+                              height="54"
+                              alt="Reviews avatar"
+                            />
                           </div>
+                          <span className="reviews__user-name">{comment.user.name}</span>
                         </div>
-                        <p className="reviews__text">
-                          A quiet cozy and picturesque that hides behind a a river by the unique lightness of
-                          Amsterdam. The
-                          building is green and from 18th century.
-                        </p>
-                        <time className="reviews__time" dateTime="2019-04-24">April 2019</time>
-                      </div>
-                    </li>
+                        {/*TODO make comment component*/}
+                        <div className="reviews__info">
+                          <div className="reviews__rating rating">
+                            <div className="reviews__stars rating__stars">
+                              <span style={{width: `${comment.rating * 20}%`}}></span>
+                              <span className="visually-hidden">Rating</span>
+                            </div>
+                          </div>
+                          <p className="reviews__text">{comment.comment}</p>
+                          {/*TODO add date lib*/}
+                          <time className="reviews__time" dateTime={comment.date}>{comment.date}</time>
+                        </div>
+                      </li>
+                    ))}
                   </ul>
-                  {/*TODO ADD HERE FORM*/}
-                  <AddReviewForm/>
+                  {!!params.id && (<AddReviewForm id={params.id}/>)}
                 </section>
               </div>
             </div>
@@ -156,6 +157,7 @@ const OfferPage: FC = () => {
               )}
             </section>
           </section>
+          {/*TODO make stupid component*/}
           {!!params.id && (<NearOffers offerId={params.id}/>)}
         </LoadingWrapper>
       </main>

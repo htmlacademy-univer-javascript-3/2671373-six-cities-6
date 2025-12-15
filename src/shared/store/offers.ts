@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {TOffer, TOfferCard} from '@/shared/model/offer';
+import {TComment, TOffer, TOfferCard} from '@/shared/model/offer';
 import {apiRoute, api} from '@/shared/store/api';
 import {AxiosError} from 'axios';
 
@@ -7,10 +7,29 @@ type TOffersState = {
   isLoading: boolean;
   offers: Record<string, TOffer[]>;
   favorites: Record<string, TOffer[]>;
+  isFavoritesLoading: boolean;
   currentOffer?: TOfferCard;
+  isCommentsLoading: boolean;
   isNearLoading: boolean;
   nearOffers: TOffer[];
+  comments: TComment[];
 }
+
+export const getComments = createAsyncThunk(
+  'offers/getComments',
+  async (id: string) => {
+    const { data } = await api.get<TComment[]>(`${apiRoute.comments}/${id}`);
+    return data;
+  }
+);
+
+export const sendComment = createAsyncThunk(
+  'offers/sendComment',
+  async ({id, ...body}:{id: string; comment: string; rating: number}) => {
+    const { data } = await api.post<TComment>(`${apiRoute.comments}/${id}`, body);
+    return data;
+  }
+);
 
 export const changeOfferFavoriteStatus = createAsyncThunk(
   'offers/changeOfferFavoriteStatus',
@@ -72,8 +91,11 @@ const initialState = {
   isLoading: false,
   offers: {},
   favorites: {},
+  isFavoritesLoading: false,
   isNearLoading: false,
+  isCommentsLoading: false,
   nearOffers: [],
+  comments: []
 } as TOffersState;
 
 export const offersSlice = createSlice({
@@ -93,13 +115,13 @@ export const offersSlice = createSlice({
     });
     builder.addCase(getFavoriteOffersList.fulfilled, (state, action) => {
       state.favorites = action.payload;
-      state.isLoading = false;
+      state.isFavoritesLoading = false;
     });
     builder.addCase(getFavoriteOffersList.pending, (state) => {
-      state.isLoading = true;
+      state.isFavoritesLoading = true;
     });
     builder.addCase(getFavoriteOffersList.rejected, (state) => {
-      state.isLoading = false;
+      state.isFavoritesLoading = false;
     });
     builder.addCase(getOfferById.fulfilled, (state, action) => {
       state.currentOffer = action.payload;
@@ -109,6 +131,7 @@ export const offersSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getOfferById.rejected, (state) => {
+      state.currentOffer = undefined;
       state.isLoading = false;
     });
     builder.addCase(getNearOffers.fulfilled, (state, action) => {
@@ -119,7 +142,19 @@ export const offersSlice = createSlice({
       state.isNearLoading = true;
     });
     builder.addCase(getNearOffers.rejected, (state) => {
+      state.nearOffers = [];
       state.isNearLoading = false;
+    });
+    builder.addCase(getComments.fulfilled, (state, action) => {
+      state.comments = action.payload;
+      state.isCommentsLoading = false;
+    });
+    builder.addCase(getComments.pending, (state) => {
+      state.isCommentsLoading = true;
+    });
+    builder.addCase(getComments.rejected, (state) => {
+      state.comments = [];
+      state.isCommentsLoading = false;
     });
   }
 });

@@ -5,7 +5,13 @@ import {Map} from '@/widgets/Map/ui';
 import {LocationsList} from './components/LocationsList';
 import {useSearchParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {RootState, useAppDispatch, getOffersList, changeOfferFavoriteStatus} from '@/shared/store';
+import {
+  RootState,
+  useAppDispatch,
+  getOffersList,
+  changeOfferFavoriteStatus,
+  getFavoriteOffersList
+} from '@/shared/store';
 import {TLocation} from '@/shared/model/offer';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 
@@ -32,6 +38,7 @@ const MainPage: FC = () => {
 
   const handleChangeOfferFavoriteStatus = async (id: string, favorite: boolean) => {
     await dispatch(changeOfferFavoriteStatus({id, favorite}));
+    await dispatch(getFavoriteOffersList());
   };
 
   const filteredOffers = useMemo(() => offers[activeCity] || [], [offers, activeCity]);

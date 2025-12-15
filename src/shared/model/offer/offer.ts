@@ -9,11 +9,11 @@ export type TCity = {
   location: TLocation;
 }
 
-export type TOfferHost = {
+export type TUser = {
   name: string;
   avatarUrl: string;
   isPro: boolean;
-};
+}
 
 export enum EOfferType {
   APARTMENT = 'apartment',
@@ -53,7 +53,16 @@ export type TOfferCard = {
   description: string;
   bedrooms: number;
   goods: string[];
-  host: TOfferHost;
+  host: TUser;
   images: string[];
   maxAdults: number;
+}
+
+// TODO to another model
+export type TComment = {
+  id: string;
+  date: string;
+  user: TUser;
+  comment: string;
+  rating: number;
 }

@@ -1,5 +1,5 @@
 import {useSelector} from 'react-redux';
-import {changeOfferFavoriteStatus, RootState, useAppDispatch} from '@/shared/store';
+import {changeOfferFavoriteStatus, getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
 import {FC} from 'react';
 import {OffersList} from '@/entities/Offer';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
@@ -16,6 +16,7 @@ const NearOffers: FC<INearOffers> = () => {
 
   const handleChangeOfferFavoriteStatus = async (id: string, favorite: boolean) => {
     await dispatch(changeOfferFavoriteStatus({id, favorite}));
+    await dispatch(getFavoriteOffersList());
   };
 
   return (
