@@ -1,5 +1,5 @@
 import {TComment} from '@/shared/model/comment';
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {AddReviewForm} from '@/features/add-review/ui/AddReviewForm';
 import {formatDate} from 'date-fns';
@@ -11,7 +11,7 @@ interface IReviews {
   isAuthorized: boolean;
 }
 
-const Reviews: FC<IReviews> = (props) => {
+const Reviews: FC<IReviews> = memo((props: IReviews) => {
 
   const { comments, isLoading, sendComment, isAuthorized } = props;
 
@@ -57,6 +57,8 @@ const Reviews: FC<IReviews> = (props) => {
       {isAuthorized && (<AddReviewForm sendComment={sendComment}/>)}
     </section>
   );
-};
+});
+
+Reviews.displayName = 'Reviews';
 
 export default Reviews;

@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {
   getOfferById,
@@ -16,34 +16,42 @@ import {AxiosResponse} from 'axios';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {Reviews} from '@/pages/Offer/ui/components/Reviews';
 import {TOffer} from '@/shared/model/offer';
+import {selectOfferPageData} from '@/shared/store/selectors';
 
 const OfferPage: FC = () => {
 
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {currentOffer, isLoading, nearOffers, isNearLoading} = useSelector((state: RootState) => state.offers);
-  const {comments, isLoading: isCommentsLoading} = useSelector((state: RootState) => state.comments);
+  const selectState = useSelector((state: RootState) => state);
+  const {
+    nearbyOffers,
+    currentOffer,
+    isNearbyOffersLoading,
+    comments,
+    isCurrentOfferLoading,
+    isCommentsLoading
+  } = selectOfferPageData(selectState);
   const {authorizationStatus} = useSelector((state: RootState) => state.auth);
   const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
-  const sendCommentHandler = (comment: string, rating: number) => {
+  const sendCommentHandler = useCallback((comment: string, rating: number) => {
     if (!params.id) {
       return;
     }
     dispatch(sendComment({id: params.id, comment, rating})).then(() => {
       dispatch(getComments(params.id as string));
     });
-  };
+  }, [dispatch, params.id]);
 
-  const changeOfferFavoriteStatusHandler = async (id: string, favorite: boolean) => {
+  const changeOfferFavoriteStatusHandler = useCallback(async (id: string, favorite: boolean) => {
     const response = await dispatch(changeOfferFavoriteStatus({id, favorite}));
     const payload = response.payload as AxiosResponse;
     if ('status' in payload && payload.status === 401) {
       navigate('/login');
     }
     await dispatch(getFavoriteOffersList());
-  };
+  }, [dispatch, navigate]);
 
   useEffect(() => {
     if (!params.id) {
@@ -61,21 +69,21 @@ const OfferPage: FC = () => {
     dispatch(getComments(params.id));
   }, [params.id, dispatch, navigate]);
 
-  const nearOffersPoints = useMemo(() => nearOffers.map((offer) => ({id: offer.id, location: offer.location})), [nearOffers]);
+  const nearOffersPoints = useMemo(() => nearbyOffers.map((offer) => ({id: offer.id, location: offer.location})), [nearbyOffers]);
 
-  const handleSelectOffer = (offer?: TOffer) => {
+  const handleSelectOffer = useCallback((offer?: TOffer) => {
     if (!offer) {
       setSelectedOffer(undefined);
       return;
     }
     setSelectedOffer({id: offer.id, location: offer.location});
-  };
+  }, []);
 
   return (
     <div className="page">
 
       <main className="page__main page__main--offer">
-        <LoadingWrapper isLoading={isLoading}>
+        <LoadingWrapper isLoading={isCurrentOfferLoading}>
           <section className="offer">
             <div className="offer__gallery-container container">
               <div className="offer__gallery">
@@ -169,14 +177,13 @@ const OfferPage: FC = () => {
                   city={currentOffer.city}
                   points={nearOffersPoints}
                   selectedPoint={selectedOffer}
-                  // selectedPoint={currentOffer.location} setSelectedPoint={() => {}}
                 />
               )}
             </section>
           </section>
           <NearOffers
-            isLoading={isNearLoading}
-            offers={nearOffers}
+            isLoading={isNearbyOffersLoading}
+            offers={nearbyOffers}
             changeOfferFavoriteStatus={changeOfferFavoriteStatusHandler}
             selectOffer={handleSelectOffer}
           />

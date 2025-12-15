@@ -1,5 +1,5 @@
 import {TOffer} from '@/shared/model/offer';
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import {OfferCard} from '@/entities/Offer';
 
 interface IOffersList {
@@ -9,7 +9,7 @@ interface IOffersList {
 }
 
 
-const OffersList: FC<IOffersList> = (props) => {
+const OffersList: FC<IOffersList> = memo((props: IOffersList) => {
   const { offers, changeFavoriteStatus, selectOffer } = props;
 
   return (
@@ -24,6 +24,8 @@ const OffersList: FC<IOffersList> = (props) => {
       ))}
     </>
   );
-};
+});
+
+OffersList.displayName = 'OffersList';
 
 export default OffersList;

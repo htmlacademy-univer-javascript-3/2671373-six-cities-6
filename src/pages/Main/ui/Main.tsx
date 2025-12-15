@@ -1,6 +1,6 @@
 import {OffersList} from '@/entities/Offer';
 import {cities, citiesCoords} from '@/shared/mocks';
-import {FC, useEffect, useMemo, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {Map, TMapPoint} from '@/widgets/Map/ui';
 import {LocationsList} from './components/LocationsList';
 import {useNavigate, useSearchParams} from 'react-router-dom';
@@ -47,22 +47,22 @@ const MainPage: FC = () => {
     dispatch(getOffersList());
   }, [activeCity, dispatch]);
 
-  const handleChangeOfferFavoriteStatus = async (id: string, favorite: boolean) => {
+  const handleChangeOfferFavoriteStatus = useCallback(async (id: string, favorite: boolean) => {
     const response = await dispatch(changeOfferFavoriteStatus({id, favorite}));
     const payload = response.payload as AxiosResponse;
     if ('status' in payload && payload.status === 401) {
       navigate('/login');
     }
     await dispatch(getFavoriteOffersList());
-  };
+  }, [dispatch, navigate]);
 
-  const handleSelectOffer = (offer?: TOffer) => {
+  const handleSelectOffer = useCallback((offer?: TOffer) => {
     if (!offer) {
       setSelectedOffer(undefined);
       return;
     }
     setSelectedOffer({id: offer.id, location: offer.location});
-  };
+  }, []);
 
   const filteredOffers = useMemo(() => offers[activeCity] || [], [offers, activeCity]);
   const sortedOffers = useMemo(() => {
