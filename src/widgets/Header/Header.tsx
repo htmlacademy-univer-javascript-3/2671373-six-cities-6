@@ -21,7 +21,7 @@ const HeaderNavNotLogged = () => (
 const HeaderNavLogged = () => {
 
   const { profile } = useSelector((state: RootState) => state.auth);
-  const { favorites } = useSelector((state: RootState) => state.offers);
+  const { favorites } = useSelector((state: RootState) => state.favorites);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

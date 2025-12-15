@@ -13,7 +13,8 @@ const OfferPage: FC = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {currentOffer, isLoading, comments} = useSelector((state: RootState) => state.offers);
+  const {currentOffer, isLoading} = useSelector((state: RootState) => state.offers);
+  const {comments, isLoading: isCommentsLoading} = useSelector((state: RootState) => state.comments);
 
   useEffect(() => {
     if (!params.id) {
@@ -117,36 +118,38 @@ const OfferPage: FC = () => {
                 </div>
                 <section className="offer__reviews reviews">
                   <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
-                  <ul className="reviews__list">
-                    {comments.map((comment) => (
-                      <li className="reviews__item" key={comment.id}>
-                        <div className="reviews__user user">
-                          <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                            <img
-                              className="reviews__avatar user__avatar"
-                              src={comment.user.avatarUrl}
-                              width="54"
-                              height="54"
-                              alt="Reviews avatar"
-                            />
-                          </div>
-                          <span className="reviews__user-name">{comment.user.name}</span>
-                        </div>
-                        {/*TODO make comment component*/}
-                        <div className="reviews__info">
-                          <div className="reviews__rating rating">
-                            <div className="reviews__stars rating__stars">
-                              <span style={{width: `${comment.rating * 20}%`}}></span>
-                              <span className="visually-hidden">Rating</span>
+                  <LoadingWrapper isLoading={isCommentsLoading}>
+                    <ul className="reviews__list">
+                      {comments.map((comment) => (
+                        <li className="reviews__item" key={comment.id}>
+                          <div className="reviews__user user">
+                            <div className="reviews__avatar-wrapper user__avatar-wrapper">
+                              <img
+                                className="reviews__avatar user__avatar"
+                                src={comment.user.avatarUrl}
+                                width="54"
+                                height="54"
+                                alt="Reviews avatar"
+                              />
                             </div>
+                            <span className="reviews__user-name">{comment.user.name}</span>
                           </div>
-                          <p className="reviews__text">{comment.comment}</p>
-                          {/*TODO add date lib*/}
-                          <time className="reviews__time" dateTime={comment.date}>{comment.date}</time>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                          {/*TODO make comment component*/}
+                          <div className="reviews__info">
+                            <div className="reviews__rating rating">
+                              <div className="reviews__stars rating__stars">
+                                <span style={{width: `${comment.rating * 20}%`}}></span>
+                                <span className="visually-hidden">Rating</span>
+                              </div>
+                            </div>
+                            <p className="reviews__text">{comment.comment}</p>
+                            {/*TODO add date lib*/}
+                            <time className="reviews__time" dateTime={comment.date}>{comment.date}</time>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </LoadingWrapper>
                   {!!params.id && (<AddReviewForm id={params.id}/>)}
                 </section>
               </div>

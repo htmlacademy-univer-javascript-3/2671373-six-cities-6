@@ -1,3 +1,5 @@
+import {TUser} from '@/shared/model/user';
+
 export type TLocation = {
   latitude: number;
   longitude: number;
@@ -7,12 +9,6 @@ export type TLocation = {
 export type TCity = {
   name: string;
   location: TLocation;
-}
-
-export type TUser = {
-  name: string;
-  avatarUrl: string;
-  isPro: boolean;
 }
 
 export enum EOfferType {
@@ -56,13 +52,4 @@ export type TOfferCard = {
   host: TUser;
   images: string[];
   maxAdults: number;
-}
-
-// TODO to another model
-export type TComment = {
-  id: string;
-  date: string;
-  user: TUser;
-  comment: string;
-  rating: number;
 }

@@ -7,7 +7,7 @@ import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 const FavoritesPage: FC = () => {
 
   const dispatch = useAppDispatch();
-  const {favorites, isLoading} = useSelector((state: RootState) => state.offers);
+  const {favorites, isLoading} = useSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     dispatch(getFavoriteOffersList());
