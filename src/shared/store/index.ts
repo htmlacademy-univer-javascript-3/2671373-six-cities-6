@@ -5,6 +5,7 @@ import {useDispatch} from 'react-redux';
 import {authReducer} from './auth.ts';
 import {commentsReducer} from './comments.ts';
 import {nearbyReducer} from './nearby.ts';
+import {currentOfferReducer} from './currentOffer.ts';
 
 export const rootStore = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const rootStore = configureStore({
     favorites: favoritesReducer,
     comments: commentsReducer,
     nearby: nearbyReducer,
+    currentOffer: currentOfferReducer,
   }
 });
 
@@ -25,3 +27,4 @@ export * from './auth.ts';
 export * from './favorites.ts';
 export * from './comments.ts';
 export * from './nearby.ts';
+export * from './currentOffer.ts';

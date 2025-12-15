@@ -1,15 +1,15 @@
 import {RootState} from '@/shared/store';
 import {createSelector} from '@reduxjs/toolkit';
 
-const selectOffers = (state: RootState) => state.offers;
+const selectCurrentOffer = (state: RootState) => state.currentOffer;
 const selectComments = (state: RootState) => state.comments;
 const selectNearby = (state: RootState) => state.nearby;
 
 export const selectOfferPageData = createSelector(
-  [selectOffers, selectComments, selectNearby],
-  (offers, comments, nearby) => ({
-    currentOffer: offers.currentOffer,
-    isCurrentOfferLoading: offers.isLoading,
+  [selectComments, selectNearby, selectCurrentOffer],
+  (comments, nearby, currentOffer) => ({
+    currentOffer: currentOffer.currentOffer,
+    isCurrentOfferLoading: currentOffer.isLoading,
     comments: comments.comments,
     isCommentsLoading: comments.isLoading,
     nearbyOffers: nearby.offers,

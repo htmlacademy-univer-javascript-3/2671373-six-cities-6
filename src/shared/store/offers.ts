@@ -1,25 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {TOffer, TOfferCard} from '@/shared/model/offer';
+import {TOffer} from '@/shared/model/offer';
 import {apiRoute, api} from '@/shared/store/api';
-import {AxiosError} from 'axios';
 
 type TOffersState = {
   isLoading: boolean;
   offers: Record<string, TOffer[]>;
-  currentOffer?: TOfferCard;
 }
-
-export const getOfferById = createAsyncThunk(
-  'offers/getOfferById',
-  async (id: string, thunkAPI) => {
-    try {
-      const { data } = await api.get<TOfferCard>(`${apiRoute.offers}/${id}`);
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue((error as AxiosError).response);
-    }
-  }
-);
 
 export const getOffersList = createAsyncThunk(
   'offers/getOffersListByLocation',
@@ -53,17 +39,6 @@ export const offersSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getOffersList.rejected, (state) => {
-      state.isLoading = false;
-    });
-    builder.addCase(getOfferById.fulfilled, (state, action) => {
-      state.currentOffer = action.payload;
-      state.isLoading = false;
-    });
-    builder.addCase(getOfferById.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getOfferById.rejected, (state) => {
-      state.currentOffer = undefined;
       state.isLoading = false;
     });
   }
