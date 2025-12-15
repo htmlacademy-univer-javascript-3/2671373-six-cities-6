@@ -7,11 +7,12 @@ interface INearOffers {
   offers: TOffer[];
   isLoading: boolean;
   changeOfferFavoriteStatus: (id: string, favorite: boolean) => Promise<void>;
+  selectOffer?: (offer?: TOffer) => void;
 }
 
 const NearOffers: FC<INearOffers> = (props) => {
 
-  const { changeOfferFavoriteStatus, offers, isLoading } = props;
+  const { changeOfferFavoriteStatus, offers, isLoading, selectOffer } = props;
 
   return (
     <div className="container">
@@ -22,6 +23,7 @@ const NearOffers: FC<INearOffers> = (props) => {
             <OffersList
               offers={offers}
               changeFavoriteStatus={changeOfferFavoriteStatus}
+              selectOffer={selectOffer}
             />
           </div>
         </LoadingWrapper>

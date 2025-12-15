@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {
   getOfferById,
@@ -10,11 +10,12 @@ import {
   changeOfferFavoriteStatus, getFavoriteOffersList
 } from '@/shared/store';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Map} from '@/widgets/Map/ui';
+import {Map, TMapPoint} from '@/widgets/Map/ui';
 import {NearOffers} from './components/NearOffers';
 import {AxiosResponse} from 'axios';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {Reviews} from '@/pages/Offer/ui/components/Reviews';
+import {TOffer} from '@/shared/model/offer';
 
 const OfferPage: FC = () => {
 
@@ -24,6 +25,7 @@ const OfferPage: FC = () => {
   const {currentOffer, isLoading, nearOffers, isNearLoading} = useSelector((state: RootState) => state.offers);
   const {comments, isLoading: isCommentsLoading} = useSelector((state: RootState) => state.comments);
   const {authorizationStatus} = useSelector((state: RootState) => state.auth);
+  const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
   const sendCommentHandler = (comment: string, rating: number) => {
     if (!params.id) {
@@ -58,6 +60,16 @@ const OfferPage: FC = () => {
     dispatch(getNearOffers(params.id));
     dispatch(getComments(params.id));
   }, [params.id, dispatch, navigate]);
+
+  const nearOffersPoints = useMemo(() => nearOffers.map((offer) => ({id: offer.id, location: offer.location})), [nearOffers]);
+
+  const handleSelectOffer = (offer?: TOffer) => {
+    if (!offer) {
+      setSelectedOffer(undefined);
+      return;
+    }
+    setSelectedOffer({id: offer.id, location: offer.location});
+  };
 
   return (
     <div className="page">
@@ -153,7 +165,12 @@ const OfferPage: FC = () => {
             </div>
             <section className="offer__map map">
               {!!currentOffer && (
-                <Map city={currentOffer.city} points={[currentOffer.location]} selectedPoint={currentOffer.location} setSelectedPoint={() => {}}/>
+                <Map
+                  city={currentOffer.city}
+                  points={nearOffersPoints}
+                  selectedPoint={selectedOffer}
+                  // selectedPoint={currentOffer.location} setSelectedPoint={() => {}}
+                />
               )}
             </section>
           </section>
@@ -161,6 +178,7 @@ const OfferPage: FC = () => {
             isLoading={isNearLoading}
             offers={nearOffers}
             changeOfferFavoriteStatus={changeOfferFavoriteStatusHandler}
+            selectOffer={handleSelectOffer}
           />
         </LoadingWrapper>
       </main>

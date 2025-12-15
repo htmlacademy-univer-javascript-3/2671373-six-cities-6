@@ -1,7 +1,7 @@
 import {OffersList} from '@/entities/Offer';
 import {cities, citiesCoords} from '@/shared/mocks';
 import {FC, useEffect, useMemo, useState} from 'react';
-import {Map} from '@/widgets/Map/ui';
+import {Map, TMapPoint} from '@/widgets/Map/ui';
 import {LocationsList} from './components/LocationsList';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
@@ -12,20 +12,29 @@ import {
   changeOfferFavoriteStatus,
   getFavoriteOffersList
 } from '@/shared/store';
-import {TLocation} from '@/shared/model/offer';
+import {TOffer} from '@/shared/model/offer';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {AxiosResponse} from 'axios';
+import {SortOffersPopup} from '@/features/sort-offers/ui/SortOffersPopup';
+
+const sortingOptions = [
+  { value: 'Popular' },
+  { value: 'Price: low to high', compareFunc: (a: TOffer, b: TOffer) => a.price - b.price },
+  { value: 'Price: high to low', compareFunc: (a: TOffer, b: TOffer) => b.price - a.price },
+  { value: 'Top rated first', compareFunc: (a: TOffer, b: TOffer) => b.rating - a.rating },
+];
 
 const MainPage: FC = () => {
 
   const [searchParams] = useSearchParams();
+  const [offersSorting, setOfferSorting] = useState(sortingOptions[0]);
+  const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {offers, isLoading} = useSelector((state: RootState) => state.offers);
 
   const [activeCity, setActiveCity] = useState(searchParams.get('city') || cities[0]);
-  const [selectedPoint, setSelectedPoint] = useState<TLocation | undefined>(undefined);
 
   useEffect(() => {
     const city = searchParams.get('city');
@@ -47,8 +56,22 @@ const MainPage: FC = () => {
     await dispatch(getFavoriteOffersList());
   };
 
+  const handleSelectOffer = (offer?: TOffer) => {
+    if (!offer) {
+      setSelectedOffer(undefined);
+      return;
+    }
+    setSelectedOffer({id: offer.id, location: offer.location});
+  };
+
   const filteredOffers = useMemo(() => offers[activeCity] || [], [offers, activeCity]);
-  const offerLocations = useMemo(() => filteredOffers.map((offer) => offer.location), [filteredOffers]);
+  const sortedOffers = useMemo(() => {
+    if (!offersSorting.compareFunc) {
+      return [...filteredOffers];
+    }
+    return [...filteredOffers].sort((a,b) => offersSorting.compareFunc(a,b));
+  }, [offersSorting, filteredOffers]);
+  const offerLocations = useMemo(() => filteredOffers.map((offer) => ({id: offer.id, location: offer.location})), [filteredOffers]);
 
   return (
     <div className="page page--gray page--main">
@@ -61,25 +84,16 @@ const MainPage: FC = () => {
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{filteredOffers.length} places to stay in {activeCity}</b>
-                <form className="places__sorting" action="#" method="get">
-                  <span className="places__sorting-caption">Sort by</span>
-                  <span className="places__sorting-type" tabIndex={0}>
-                  Popular
-                    <svg className="places__sorting-arrow" width="7" height="4">
-                      <use xlinkHref="#icon-arrow-select"></use>
-                    </svg>
-                  </span>
-                  <ul className="places__options places__options--custom places__options--opened">
-                    <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                    <li className="places__option" tabIndex={0}>Price: low to high</li>
-                    <li className="places__option" tabIndex={0}>Price: high to low</li>
-                    <li className="places__option" tabIndex={0}>Top rated first</li>
-                  </ul>
-                </form>
+                <SortOffersPopup
+                  sorting={offersSorting}
+                  setSorting={setOfferSorting}
+                  options={sortingOptions}
+                />
                 <div className="cities__places-list places__list tabs__content">
                   <OffersList
-                    offers={filteredOffers}
+                    offers={sortedOffers}
                     changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                    selectOffer={handleSelectOffer}
                   />
                 </div>
               </section>
@@ -87,8 +101,7 @@ const MainPage: FC = () => {
                 <Map
                   city={citiesCoords[activeCity]}
                   points={offerLocations}
-                  selectedPoint={selectedPoint}
-                  setSelectedPoint={setSelectedPoint}
+                  selectedPoint={selectedOffer}
                 />
               </div>
             </div>

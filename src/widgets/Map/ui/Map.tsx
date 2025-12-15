@@ -7,7 +7,7 @@ import {IMap} from './Map.type.ts';
 
 const Map: FC<IMap> = (props) => {
 
-  const { points, selectedPoint, city, setSelectedPoint } = props;
+  const { points, selectedPoint, city } = props;
   const containerRef = useRef(null);
   const map = useMap(containerRef, city);
 
@@ -16,21 +16,24 @@ const Map: FC<IMap> = (props) => {
       const markerLayer = layerGroup().addTo(map.current);
       points.forEach((point) => {
         const marker = new Marker({
-          lat: point.latitude,
-          lng: point.longitude
+          lat: point.location.latitude,
+          lng: point.location.longitude
         });
 
         marker
           .setIcon(
-            selectedPoint !== undefined && point.latitude === selectedPoint.latitude && point.longitude === selectedPoint.longitude
+            selectedPoint !== undefined && point.id === selectedPoint.id
               ? currentCustomIcon
               : defaultCustomIcon
           )
-          // .setIcon(defaultCustomIcon)
-          .addEventListener('click', () => setSelectedPoint(point))
           .addTo(markerLayer);
       });
-      map.current?.setZoom(selectedPoint?.zoom || 13);
+
+      if (selectedPoint) {
+        map.current.setView({lat: selectedPoint.location.latitude, lng: selectedPoint.location.longitude}, selectedPoint.location.zoom);
+      } else {
+        map.current.setView({lat: city.location.latitude, lng: city.location.longitude}, city.location.zoom);
+      }
 
       return () => {
         map.current?.removeLayer(markerLayer);

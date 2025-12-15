@@ -1,23 +1,16 @@
 import {TOffer} from '@/shared/model/offer';
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {OfferCard} from '@/entities/Offer';
 
 interface IOffersList {
   offers: TOffer[];
+  selectOffer?: (offer?: TOffer) => void;
   changeFavoriteStatus: (id: string, favorite: boolean) => Promise<void>;
 }
 
 
 const OffersList: FC<IOffersList> = (props) => {
-  const { offers, changeFavoriteStatus } = props;
-
-  const [activeOfferId, setActiveOfferId] = useState('');
-
-  const selectActiveOfferId = (id: string) => {
-    setActiveOfferId(id);
-  };
-
-  const isOfferActive = (id: string) => activeOfferId === id;
+  const { offers, changeFavoriteStatus, selectOffer } = props;
 
   return (
     <>
@@ -25,9 +18,8 @@ const OffersList: FC<IOffersList> = (props) => {
         <OfferCard
           offer={offer}
           key={offer.id}
-          isActive={isOfferActive(offer.id)}
-          selectActiveOfferId={selectActiveOfferId}
           changeFavoriteStatus={changeFavoriteStatus}
+          selectOffer={selectOffer}
         />
       ))}
     </>
