@@ -2,7 +2,7 @@ import {FC, useEffect} from 'react';
 import {OffersList} from '@/entities/Offer';
 import {changeOfferFavoriteStatus, getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
 import {useSelector} from 'react-redux';
-import {ClipLoader} from 'react-spinners';
+import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 
 const FavoritesPage: FC = () => {
 
@@ -25,29 +25,27 @@ const FavoritesPage: FC = () => {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            {isLoading
-              ? <ClipLoader cssOverride={{margin: '0 auto'}} loading size={150}/>
-              : (
-                <ul className="favorites__list">
-                  {Object.entries(favorites).map(([city, offers]) => (
-                    <li className="favorites__locations-items" key={city}>
-                      <div className="favorites__locations locations locations--current">
-                        <div className="locations__item">
-                          <a className="locations__item-link" href="#">
-                            <span>{city}</span>
-                          </a>
-                        </div>
+            <LoadingWrapper isLoading={isLoading}>
+              <ul className="favorites__list">
+                {Object.entries(favorites).map(([city, offers]) => (
+                  <li className="favorites__locations-items" key={city}>
+                    <div className="favorites__locations locations locations--current">
+                      <div className="locations__item">
+                        <a className="locations__item-link" href="#">
+                          <span>{city}</span>
+                        </a>
                       </div>
-                      <div className="cities__places-list places__list tabs__content">
-                        <OffersList
-                          offers={offers}
-                          changeFavoriteStatus={handleChangeOfferFavoriteStatus}
-                        />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
+                    </div>
+                    <div className="cities__places-list places__list tabs__content">
+                      <OffersList
+                        offers={offers}
+                        changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                      />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </LoadingWrapper>
           </section>
         </div>
       </main>
