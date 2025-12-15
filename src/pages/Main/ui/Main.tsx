@@ -16,12 +16,13 @@ import {TOffer} from '@/shared/model/offer';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {AxiosResponse} from 'axios';
 import {SortOffersPopup} from '@/features/sort-offers/ui/SortOffersPopup';
+import * as classNames from 'classnames';
 
 const sortingOptions = [
-  { value: 'Popular' },
-  { value: 'Price: low to high', compareFunc: (a: TOffer, b: TOffer) => a.price - b.price },
-  { value: 'Price: high to low', compareFunc: (a: TOffer, b: TOffer) => b.price - a.price },
-  { value: 'Top rated first', compareFunc: (a: TOffer, b: TOffer) => b.rating - a.rating },
+  {value: 'Popular'},
+  {value: 'Price: low to high', compareFunc: (a: TOffer, b: TOffer) => a.price - b.price},
+  {value: 'Price: high to low', compareFunc: (a: TOffer, b: TOffer) => b.price - a.price},
+  {value: 'Top rated first', compareFunc: (a: TOffer, b: TOffer) => b.rating - a.rating},
 ];
 
 const MainPage: FC = () => {
@@ -69,9 +70,14 @@ const MainPage: FC = () => {
     if (!offersSorting.compareFunc) {
       return [...filteredOffers];
     }
-    return [...filteredOffers].sort((a,b) => offersSorting.compareFunc(a,b));
+    return [...filteredOffers].sort((a, b) => offersSorting.compareFunc(a, b));
   }, [offersSorting, filteredOffers]);
-  const offerLocations = useMemo(() => filteredOffers.map((offer) => ({id: offer.id, location: offer.location})), [filteredOffers]);
+  const offerLocations = useMemo(() => filteredOffers.map((offer) => ({
+    id: offer.id,
+    location: offer.location
+  })), [filteredOffers]);
+
+  const isPageEmpty = sortedOffers.length === 0;
 
   return (
     <div className="page page--gray page--main">
@@ -80,23 +86,33 @@ const MainPage: FC = () => {
         <LocationsList locations={cities} active={activeCity}/>
         <LoadingWrapper isLoading={isLoading}>
           <div className="cities">
-            <div className="cities__places-container container">
-              <section className="cities__places places">
-                <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{filteredOffers.length} places to stay in {activeCity}</b>
-                <SortOffersPopup
-                  sorting={offersSorting}
-                  setSorting={setOfferSorting}
-                  options={sortingOptions}
-                />
-                <div className="cities__places-list places__list tabs__content">
-                  <OffersList
-                    offers={sortedOffers}
-                    changeFavoriteStatus={handleChangeOfferFavoriteStatus}
-                    selectOffer={handleSelectOffer}
+            <div className={classNames('cities__places-container container', isPageEmpty && 'cities__places-container--empty')}>
+              {isPageEmpty ? (
+                <section className="cities__no-places">
+                  <div className="cities__status-wrapper tabs__content">
+                    <b className="cities__status">No places to stay available</b>
+                    <p className="cities__status-description">We could not find any property available at the moment in {activeCity}
+                    </p>
+                  </div>
+                </section>
+              ) : (
+                <section className="cities__places places">
+                  <h2 className="visually-hidden">Places</h2>
+                  <b className="places__found">{filteredOffers.length} places to stay in {activeCity}</b>
+                  <SortOffersPopup
+                    sorting={offersSorting}
+                    setSorting={setOfferSorting}
+                    options={sortingOptions}
                   />
-                </div>
-              </section>
+                  <div className="cities__places-list places__list tabs__content">
+                    <OffersList
+                      offers={sortedOffers}
+                      changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                      selectOffer={handleSelectOffer}
+                    />
+                  </div>
+                </section>
+              )}
               <div className="cities__right-section">
                 <Map
                   city={citiesCoords[activeCity]}
