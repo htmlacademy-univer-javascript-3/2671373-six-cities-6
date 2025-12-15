@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {
   getOfferById,
@@ -35,23 +35,23 @@ const OfferPage: FC = () => {
   const {authorizationStatus} = useSelector((state: RootState) => state.auth);
   const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
-  const sendCommentHandler = (comment: string, rating: number) => {
+  const sendCommentHandler = useCallback((comment: string, rating: number) => {
     if (!params.id) {
       return;
     }
     dispatch(sendComment({id: params.id, comment, rating})).then(() => {
       dispatch(getComments(params.id as string));
     });
-  };
+  }, [dispatch, params.id]);
 
-  const changeOfferFavoriteStatusHandler = async (id: string, favorite: boolean) => {
+  const changeOfferFavoriteStatusHandler = useCallback(async (id: string, favorite: boolean) => {
     const response = await dispatch(changeOfferFavoriteStatus({id, favorite}));
     const payload = response.payload as AxiosResponse;
     if ('status' in payload && payload.status === 401) {
       navigate('/login');
     }
     await dispatch(getFavoriteOffersList());
-  };
+  }, [dispatch, navigate]);
 
   useEffect(() => {
     if (!params.id) {
@@ -71,13 +71,13 @@ const OfferPage: FC = () => {
 
   const nearOffersPoints = useMemo(() => nearbyOffers.map((offer) => ({id: offer.id, location: offer.location})), [nearbyOffers]);
 
-  const handleSelectOffer = (offer?: TOffer) => {
+  const handleSelectOffer = useCallback((offer?: TOffer) => {
     if (!offer) {
       setSelectedOffer(undefined);
       return;
     }
     setSelectedOffer({id: offer.id, location: offer.location});
-  };
+  }, []);
 
   return (
     <div className="page">

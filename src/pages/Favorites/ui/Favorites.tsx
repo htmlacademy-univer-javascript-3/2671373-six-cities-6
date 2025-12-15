@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {OffersList} from '@/entities/Offer';
 import {changeOfferFavoriteStatus, getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
 import {useSelector} from 'react-redux';
@@ -13,10 +13,10 @@ const FavoritesPage: FC = () => {
     dispatch(getFavoriteOffersList());
   }, [dispatch]);
 
-  const handleChangeOfferFavoriteStatus = async (id: string, favorite: boolean) => {
+  const handleChangeOfferFavoriteStatus = useCallback(async (id: string, favorite: boolean) => {
     await dispatch(changeOfferFavoriteStatus({id, favorite}));
     await dispatch(getFavoriteOffersList());
-  };
+  }, [dispatch]);
 
   return (
     <div className="page">
