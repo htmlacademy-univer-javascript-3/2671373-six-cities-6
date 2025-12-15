@@ -16,15 +16,22 @@ import {AxiosResponse} from 'axios';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {Reviews} from '@/pages/Offer/ui/components/Reviews';
 import {TOffer} from '@/shared/model/offer';
+import {selectOfferPageData} from '@/shared/store/selectors';
 
 const OfferPage: FC = () => {
 
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {currentOffer, isLoading} = useSelector((state: RootState) => state.offers);
-  const {offers: nearbyOffers, isLoading: isNearbyOffersLoading} = useSelector((state: RootState) => state.nearby);
-  const {comments, isLoading: isCommentsLoading} = useSelector((state: RootState) => state.comments);
+  const selectState = useSelector((state: RootState) => state);
+  const {
+    nearbyOffers,
+    currentOffer,
+    isNearbyOffersLoading,
+    comments,
+    isCurrentOfferLoading,
+    isCommentsLoading
+  } = selectOfferPageData(selectState);
   const {authorizationStatus} = useSelector((state: RootState) => state.auth);
   const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
@@ -76,7 +83,7 @@ const OfferPage: FC = () => {
     <div className="page">
 
       <main className="page__main page__main--offer">
-        <LoadingWrapper isLoading={isLoading}>
+        <LoadingWrapper isLoading={isCurrentOfferLoading}>
           <section className="offer">
             <div className="offer__gallery-container container">
               <div className="offer__gallery">

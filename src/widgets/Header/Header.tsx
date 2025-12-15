@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import {getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
 import {logout} from '@/shared/store/auth.ts';
 import {useEffect, useMemo} from 'react';
+import {selectProfileWithFavorites} from '@/shared/store/selectors';
 
 const HeaderNavNotLogged = () => (
   <nav className="header__nav">
@@ -20,8 +21,8 @@ const HeaderNavNotLogged = () => (
 
 const HeaderNavLogged = () => {
 
-  const { profile } = useSelector((state: RootState) => state.auth);
-  const { favorites } = useSelector((state: RootState) => state.favorites);
+  const selectState = useSelector((state: RootState) => state);
+  const { profile, favorites } = selectProfileWithFavorites(selectState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
