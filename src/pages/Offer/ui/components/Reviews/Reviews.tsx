@@ -2,6 +2,7 @@ import {TComment} from '@/shared/model/comment';
 import {FC} from 'react';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {AddReviewForm} from '@/features/add-review/ui/AddReviewForm';
+import {formatDate} from 'date-fns';
 
 interface IReviews {
   comments: TComment[];
@@ -42,7 +43,12 @@ const Reviews: FC<IReviews> = (props) => {
                 </div>
                 <p className="reviews__text">{comment.comment}</p>
                 {/*TODO add date lib*/}
-                <time className="reviews__time" dateTime={comment.date}>{comment.date}</time>
+                <time
+                  className="reviews__time"
+                  dateTime={formatDate(comment.date, 'yyyy-MM-dd')}
+                >
+                  {formatDate(comment.date, 'MMMM yyyy')}
+                </time>
               </div>
             </li>
           ))}
