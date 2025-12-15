@@ -7,11 +7,12 @@ interface IReviews {
   comments: TComment[];
   isLoading: boolean;
   sendComment: (comment: string, rating: number) => void;
+  isAuthorized: boolean;
 }
 
 const Reviews: FC<IReviews> = (props) => {
 
-  const { comments, isLoading, sendComment } = props;
+  const { comments, isLoading, sendComment, isAuthorized } = props;
 
   return (
     <section className="offer__reviews reviews">
@@ -47,7 +48,7 @@ const Reviews: FC<IReviews> = (props) => {
           ))}
         </ul>
       </LoadingWrapper>
-      <AddReviewForm sendComment={sendComment}/>
+      {isAuthorized && (<AddReviewForm sendComment={sendComment}/>)}
     </section>
   );
 };

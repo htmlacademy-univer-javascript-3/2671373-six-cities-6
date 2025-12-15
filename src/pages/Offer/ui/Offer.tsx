@@ -23,6 +23,7 @@ const OfferPage: FC = () => {
   const navigate = useNavigate();
   const {currentOffer, isLoading, nearOffers, isNearLoading} = useSelector((state: RootState) => state.offers);
   const {comments, isLoading: isCommentsLoading} = useSelector((state: RootState) => state.comments);
+  const {authorizationStatus} = useSelector((state: RootState) => state.auth);
 
   const sendCommentHandler = (comment: string, rating: number) => {
     if (!params.id) {
@@ -143,6 +144,7 @@ const OfferPage: FC = () => {
                   </div>
                 </div>
                 <Reviews
+                  isAuthorized={authorizationStatus}
                   comments={comments}
                   isLoading={isCommentsLoading}
                   sendComment={sendCommentHandler}
