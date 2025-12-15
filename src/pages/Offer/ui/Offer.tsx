@@ -22,7 +22,8 @@ const OfferPage: FC = () => {
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {currentOffer, isLoading, nearOffers, isNearLoading} = useSelector((state: RootState) => state.offers);
+  const {currentOffer, isLoading} = useSelector((state: RootState) => state.offers);
+  const {offers: nearbyOffers, isLoading: isNearbyOffersLoading} = useSelector((state: RootState) => state.nearby);
   const {comments, isLoading: isCommentsLoading} = useSelector((state: RootState) => state.comments);
   const {authorizationStatus} = useSelector((state: RootState) => state.auth);
   const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
@@ -61,7 +62,7 @@ const OfferPage: FC = () => {
     dispatch(getComments(params.id));
   }, [params.id, dispatch, navigate]);
 
-  const nearOffersPoints = useMemo(() => nearOffers.map((offer) => ({id: offer.id, location: offer.location})), [nearOffers]);
+  const nearOffersPoints = useMemo(() => nearbyOffers.map((offer) => ({id: offer.id, location: offer.location})), [nearbyOffers]);
 
   const handleSelectOffer = (offer?: TOffer) => {
     if (!offer) {
@@ -169,14 +170,13 @@ const OfferPage: FC = () => {
                   city={currentOffer.city}
                   points={nearOffersPoints}
                   selectedPoint={selectedOffer}
-                  // selectedPoint={currentOffer.location} setSelectedPoint={() => {}}
                 />
               )}
             </section>
           </section>
           <NearOffers
-            isLoading={isNearLoading}
-            offers={nearOffers}
+            isLoading={isNearbyOffersLoading}
+            offers={nearbyOffers}
             changeOfferFavoriteStatus={changeOfferFavoriteStatusHandler}
             selectOffer={handleSelectOffer}
           />

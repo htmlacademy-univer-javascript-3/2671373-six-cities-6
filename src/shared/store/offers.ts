@@ -7,8 +7,6 @@ type TOffersState = {
   isLoading: boolean;
   offers: Record<string, TOffer[]>;
   currentOffer?: TOfferCard;
-  isNearLoading: boolean;
-  nearOffers: TOffer[];
 }
 
 export const getOfferById = createAsyncThunk(
@@ -20,14 +18,6 @@ export const getOfferById = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue((error as AxiosError).response);
     }
-  }
-);
-
-export const getNearOffers = createAsyncThunk(
-  'offers/getNearOffers',
-  async (id: string) => {
-    const { data } = await api.get<TOffer[]>(`${apiRoute.offers}/${id}/nearby`);
-    return data;
   }
 );
 
@@ -48,8 +38,6 @@ export const getOffersList = createAsyncThunk(
 const initialState = {
   isLoading: false,
   offers: {},
-  isNearLoading: false,
-  nearOffers: [],
 } as TOffersState;
 
 export const offersSlice = createSlice({
@@ -77,17 +65,6 @@ export const offersSlice = createSlice({
     builder.addCase(getOfferById.rejected, (state) => {
       state.currentOffer = undefined;
       state.isLoading = false;
-    });
-    builder.addCase(getNearOffers.fulfilled, (state, action) => {
-      state.nearOffers = action.payload;
-      state.isNearLoading = false;
-    });
-    builder.addCase(getNearOffers.pending, (state) => {
-      state.isNearLoading = true;
-    });
-    builder.addCase(getNearOffers.rejected, (state) => {
-      state.nearOffers = [];
-      state.isNearLoading = false;
     });
   }
 });
