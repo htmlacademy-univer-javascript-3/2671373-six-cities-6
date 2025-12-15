@@ -41,6 +41,7 @@ const HeaderNavLogged = () => {
         <li className="header__nav-item user">
           <Link className="header__nav-link header__nav-link--profile" to='/favorites'>
             <div className="header__avatar-wrapper user__avatar-wrapper">
+              <img src={profile?.avatarUrl} alt="avatar" className="user__avatar"/>
             </div>
             <span className="header__user-name user__name">{profile?.email}</span>
             <span className="header__favorite-count">{favoritesCount}</span>

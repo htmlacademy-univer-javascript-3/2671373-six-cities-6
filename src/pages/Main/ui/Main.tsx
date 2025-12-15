@@ -3,7 +3,7 @@ import {cities, citiesCoords} from '@/shared/mocks';
 import {FC, useEffect, useMemo, useState} from 'react';
 import {Map} from '@/widgets/Map/ui';
 import {LocationsList} from './components/LocationsList';
-import {useSearchParams} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {
   RootState,
@@ -14,12 +14,14 @@ import {
 } from '@/shared/store';
 import {TLocation} from '@/shared/model/offer';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
+import {AxiosResponse} from 'axios';
 
 const MainPage: FC = () => {
 
   const [searchParams] = useSearchParams();
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const {offers, isLoading} = useSelector((state: RootState) => state.offers);
 
   const [activeCity, setActiveCity] = useState(searchParams.get('city') || cities[0]);
@@ -37,7 +39,11 @@ const MainPage: FC = () => {
   }, [activeCity, dispatch]);
 
   const handleChangeOfferFavoriteStatus = async (id: string, favorite: boolean) => {
-    await dispatch(changeOfferFavoriteStatus({id, favorite}));
+    const response = await dispatch(changeOfferFavoriteStatus({id, favorite}));
+    const payload = response.payload as AxiosResponse;
+    if ('status' in payload && payload.status === 401) {
+      navigate('/login');
+    }
     await dispatch(getFavoriteOffersList());
   };
 

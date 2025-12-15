@@ -33,9 +33,13 @@ export const sendComment = createAsyncThunk(
 
 export const changeOfferFavoriteStatus = createAsyncThunk(
   'offers/changeOfferFavoriteStatus',
-  async ({id, favorite}:{id: string; favorite: boolean}) => {
-    const {data} = await api.post<TOffer>(`${apiRoute.favorite}/${id}/${favorite ? 1 : 0}`);
-    return data;
+  async ({id, favorite}:{id: string; favorite: boolean}, thunkAPI) => {
+    try {
+      const {data} = await api.post<TOffer>(`${apiRoute.favorite}/${id}/${favorite ? 1 : 0}`);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue((error as AxiosError).response);
+    }
   }
 );
 
