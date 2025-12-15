@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import * as classNames from 'classnames';
 import {Link} from 'react-router-dom';
 
@@ -7,7 +7,7 @@ interface ILocationsList {
   active: string;
 }
 
-const LocationsList: FC<ILocationsList> = (props) => {
+const LocationsList: FC<ILocationsList> = memo((props: ILocationsList) => {
 
   const { active, locations } = props;
 
@@ -26,6 +26,8 @@ const LocationsList: FC<ILocationsList> = (props) => {
       </section>
     </div>
   );
-};
+});
+
+LocationsList.displayName = 'LocationsList';
 
 export default LocationsList;

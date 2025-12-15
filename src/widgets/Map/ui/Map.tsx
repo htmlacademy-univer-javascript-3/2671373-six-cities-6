@@ -1,11 +1,11 @@
-import {FC, useEffect, useRef} from 'react';
+import {FC, memo, useEffect, useRef} from 'react';
 import {useMap} from '../hooks';
 import {Marker, layerGroup} from 'leaflet';
 import { defaultCustomIcon, currentCustomIcon } from '../constants/icons';
 import 'leaflet/dist/leaflet.css';
 import {IMap} from './Map.type.ts';
 
-const Map: FC<IMap> = (props) => {
+const Map: FC<IMap> = memo((props: IMap) => {
 
   const { points, selectedPoint, city } = props;
   const containerRef = useRef(null);
@@ -48,6 +48,8 @@ const Map: FC<IMap> = (props) => {
       style={{height: '100%', width: '100%'}}
     />
   );
-};
+});
+
+Map.displayName = 'Map';
 
 export default Map;

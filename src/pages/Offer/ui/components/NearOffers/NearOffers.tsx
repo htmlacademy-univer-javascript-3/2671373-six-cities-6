@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import {OffersList} from '@/entities/Offer';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {TOffer} from '@/shared/model/offer';
@@ -10,7 +10,7 @@ interface INearOffers {
   selectOffer?: (offer?: TOffer) => void;
 }
 
-const NearOffers: FC<INearOffers> = (props) => {
+const NearOffers: FC<INearOffers> = memo((props: INearOffers) => {
 
   const { changeOfferFavoriteStatus, offers, isLoading, selectOffer } = props;
 
@@ -30,6 +30,8 @@ const NearOffers: FC<INearOffers> = (props) => {
       </section>
     </div>
   );
-};
+});
+
+NearOffers.displayName = 'NearOffers';
 
 export default NearOffers;

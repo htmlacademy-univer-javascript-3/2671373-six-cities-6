@@ -1,10 +1,10 @@
-import {FC, useState} from 'react';
+import {FC, memo, useState} from 'react';
 import {IOfferCard} from './OfferCard.type';
 import {Link} from 'react-router-dom';
 import {BookmarkButton} from '@/shared/ui/BookmarkButton';
 import {Rating} from '@/shared/ui/Rating';
 
-const OfferCard: FC<IOfferCard> = (props) => {
+const OfferCard: FC<IOfferCard> = memo((props: IOfferCard) => {
 
   const { offer, changeFavoriteStatus, selectOffer } = props;
   const [isFavorite, setFavorite] = useState(offer.isFavorite);
@@ -47,6 +47,8 @@ const OfferCard: FC<IOfferCard> = (props) => {
       </div>
     </article>
   );
-};
+});
+
+OfferCard.displayName = 'OfferCard';
 
 export default OfferCard;

@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import {RatingInput} from '@/shared/ui/RatingInput';
 import {SubmitHandler, useForm} from 'react-hook-form';
 
@@ -11,7 +11,7 @@ type TReviewValues = {
   comment: string;
 }
 
-const AddReviewForm: FC<IAddReviewForm> = (props) => {
+const AddReviewForm: FC<IAddReviewForm> = memo((props: IAddReviewForm) => {
 
   const { sendComment } = props;
   const {register, setValue, handleSubmit, watch} = useForm<TReviewValues>({
@@ -57,6 +57,8 @@ const AddReviewForm: FC<IAddReviewForm> = (props) => {
       </div>
     </form>
   );
-};
+});
+
+AddReviewForm.displayName = 'AddReviewForm';
 
 export default AddReviewForm;
