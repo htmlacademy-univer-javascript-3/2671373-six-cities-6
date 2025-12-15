@@ -1,7 +1,7 @@
 import {FC, useEffect, useRef} from 'react';
 import {useMap} from '../hooks';
 import {Marker, layerGroup} from 'leaflet';
-import { defaultCustomIcon } from '../constants/icons';
+import { defaultCustomIcon, currentCustomIcon } from '../constants/icons';
 import 'leaflet/dist/leaflet.css';
 import {IMap} from './Map.type.ts';
 
@@ -21,15 +21,16 @@ const Map: FC<IMap> = (props) => {
         });
 
         marker
-          // .setIcon(
-          //   selectedPoint !== undefined && point.title === selectedPoint.title
-          //     ? currentCustomIcon
-          //     : defaultCustomIcon
-          // )
-          .setIcon(defaultCustomIcon)
+          .setIcon(
+            selectedPoint !== undefined && point.latitude === selectedPoint.latitude && point.longitude === selectedPoint.longitude
+              ? currentCustomIcon
+              : defaultCustomIcon
+          )
+          // .setIcon(defaultCustomIcon)
           .addEventListener('click', () => setSelectedPoint(point))
           .addTo(markerLayer);
       });
+      map.current?.setZoom(selectedPoint?.zoom || 13);
 
       return () => {
         map.current?.removeLayer(markerLayer);

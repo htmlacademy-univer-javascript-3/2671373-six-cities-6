@@ -1,7 +1,8 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {RootState, useAppDispatch} from '@/shared/store';
+import {getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
 import {logout} from '@/shared/store/auth.ts';
+import {useEffect, useMemo} from 'react';
 
 const HeaderNavNotLogged = () => (
   <nav className="header__nav">
@@ -20,6 +21,7 @@ const HeaderNavNotLogged = () => (
 const HeaderNavLogged = () => {
 
   const { profile } = useSelector((state: RootState) => state.auth);
+  const { favorites } = useSelector((state: RootState) => state.favorites);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -27,15 +29,22 @@ const HeaderNavLogged = () => {
     dispatch(logout()).then(() => navigate('/login'));
   };
 
+  useEffect(() => {
+    dispatch(getFavoriteOffersList());
+  }, [dispatch]);
+
+  const favoritesCount = useMemo(() => Object.values(favorites).flat(1).length, [favorites]);
+
   return (
     <nav className="header__nav">
       <ul className="header__nav-list">
         <li className="header__nav-item user">
           <Link className="header__nav-link header__nav-link--profile" to='/favorites'>
             <div className="header__avatar-wrapper user__avatar-wrapper">
+              <img src={profile?.avatarUrl} alt="avatar" className="user__avatar"/>
             </div>
             <span className="header__user-name user__name">{profile?.email}</span>
-            <span className="header__favorite-count">3</span>
+            <span className="header__favorite-count">{favoritesCount}</span>
           </Link>
         </li>
         <li className="header__nav-item">

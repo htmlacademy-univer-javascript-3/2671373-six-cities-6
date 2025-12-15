@@ -3,4 +3,5 @@ export const apiRoute = {
   login: '/login',
   logout: '/logout',
   favorite: '/favorite',
+  comments: '/comments',
 };

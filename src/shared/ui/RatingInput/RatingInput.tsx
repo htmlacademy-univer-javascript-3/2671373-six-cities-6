@@ -1,8 +1,7 @@
 import {ChangeEventHandler, Dispatch, FC, Fragment} from 'react';
 
 interface IRatingInput {
-  // value: number;
-  // setValue: Dispatch<SetStateAction<number>>;
+  value: number;
   setValue: Dispatch<number>;
 }
 
@@ -15,10 +14,10 @@ const ratings = [
 ] as const;
 
 const RatingInput: FC<IRatingInput> = (props) => {
-  const { setValue } = props;
+  const { setValue, value } = props;
 
   const handleChangeRating: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setValue(event.target.value as unknown as number);
+    setValue(parseInt(event.target.value, 10));
   };
 
   return (
@@ -35,6 +34,7 @@ const RatingInput: FC<IRatingInput> = (props) => {
               value={count}
               id={id}
               type="radio"
+              checked={count === value}
               onChange={handleChangeRating}
             />
             <label

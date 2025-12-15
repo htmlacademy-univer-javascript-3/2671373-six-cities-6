@@ -1,10 +1,19 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {IOfferCard} from './OfferCard.type';
 import {Link} from 'react-router-dom';
+import {BookmarkButton} from '@/shared/ui/BookmarkButton';
+import {Rating} from '@/shared/ui/Rating';
 
 const OfferCard: FC<IOfferCard> = (props) => {
 
-  const { offer, selectActiveOfferId } = props;
+  const { offer, selectActiveOfferId, changeFavoriteStatus } = props;
+  const [isFavorite, setFavorite] = useState(offer.isFavorite);
+
+  const handleChangeFavorite = () => {
+    changeFavoriteStatus(offer.id, !isFavorite).then(() => {
+      setFavorite(!isFavorite);
+    });
+  };
 
   return (
     <article
@@ -28,21 +37,9 @@ const OfferCard: FC<IOfferCard> = (props) => {
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button place-card__bookmark-button--active button"
-            type="button"
-          >
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">In bookmarks</span>
-          </button>
+          <BookmarkButton active={isFavorite} onClick={handleChangeFavorite}/>
         </div>
-        <div className="place-card__rating rating">
-          <div className="place-card__stars rating__stars">
-            <span style={{width: '80%'}}></span>
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
+        <Rating rating={offer.rating} />
         <h2 className="place-card__name">
           <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
         </h2>

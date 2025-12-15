@@ -1,3 +1,5 @@
+import {TUser} from '@/shared/model/user';
+
 export type TLocation = {
   latitude: number;
   longitude: number;
@@ -33,3 +35,21 @@ export type TOffer = {
   rating: TOfferRating;
   previewImage: string;
 };
+
+export type TOfferCard = {
+  id: string;
+  title: string;
+  type: string;
+  price: number;
+  city: TCity;
+  location: TLocation;
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
+  description: string;
+  bedrooms: number;
+  goods: string[];
+  host: TUser;
+  images: string[];
+  maxAdults: number;
+}

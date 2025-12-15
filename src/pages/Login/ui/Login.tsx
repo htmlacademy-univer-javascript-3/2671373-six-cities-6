@@ -1,7 +1,6 @@
 import {FC, useState} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {login} from '@/shared/store/auth.ts';
-import {useAppDispatch} from '@/shared/store';
+import {useAppDispatch, login} from '@/shared/store';
 import {useNavigate} from 'react-router-dom';
 import {AxiosResponse} from 'axios';
 
