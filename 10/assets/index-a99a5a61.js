@@ -1,0 +1,1 @@
+import{j as a,O as s}from"./index-aa50c95b.js";import{H as e}from"./Header-bcf57efc.js";const t=()=>a.jsxs("div",{className:"page page--gray page--main",children:[a.jsx(e,{}),a.jsx(s,{})]}),i=t;export{i as MainLayout};
