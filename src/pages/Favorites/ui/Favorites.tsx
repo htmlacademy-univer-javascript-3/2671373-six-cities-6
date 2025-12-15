@@ -3,6 +3,7 @@ import {OffersList} from '@/entities/Offer';
 import {changeOfferFavoriteStatus, getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
 import {useSelector} from 'react-redux';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
+import * as classNames from 'classnames';
 
 const FavoritesPage: FC = () => {
 
@@ -18,33 +19,42 @@ const FavoritesPage: FC = () => {
     await dispatch(getFavoriteOffersList());
   }, [dispatch]);
 
-  return (
-    <div className="page">
+  const isPageEmpty = Object.values(favorites).length === 0;
 
-      <main className="page__main page__main--favorites">
+  return (
+    <div className={classNames('page', isPageEmpty && 'page--favorites-empty')}>
+
+      <main className={classNames('page__main page__main--favorites', isPageEmpty && 'page__main--favorites-empty')}>
         <div className="page__favorites-container container">
-          <section className="favorites">
+          <section className={classNames('favorites', isPageEmpty && 'favorites--empty')}>
             <h1 className="favorites__title">Saved listing</h1>
             <LoadingWrapper isLoading={isLoading}>
-              <ul className="favorites__list">
-                {Object.entries(favorites).map(([city, offers]) => (
-                  <li className="favorites__locations-items" key={city}>
-                    <div className="favorites__locations locations locations--current">
-                      <div className="locations__item">
-                        <a className="locations__item-link" href="#">
-                          <span>{city}</span>
-                        </a>
+              {isPageEmpty ? (
+                <div className="favorites__status-wrapper">
+                  <b className="favorites__status">Nothing yet saved.</b>
+                  <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+                </div>
+              ) : (
+                <ul className="favorites__list">
+                  {Object.entries(favorites).map(([city, offers]) => (
+                    <li className="favorites__locations-items" key={city}>
+                      <div className="favorites__locations locations locations--current">
+                        <div className="locations__item">
+                          <a className="locations__item-link" href="#">
+                            <span>{city}</span>
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                    <div className="cities__places-list places__list tabs__content">
-                      <OffersList
-                        offers={offers}
-                        changeFavoriteStatus={handleChangeOfferFavoriteStatus}
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                      <div className="cities__places-list places__list tabs__content">
+                        <OffersList
+                          offers={offers}
+                          changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </LoadingWrapper>
           </section>
         </div>
