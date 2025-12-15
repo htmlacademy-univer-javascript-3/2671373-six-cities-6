@@ -3,7 +3,7 @@ import * as classNames from 'classnames';
 
 export type TSorting = {
   value: string;
-  compareFunc: (a: any, b: any) => number;
+  compareFunc?: (a: any, b: any) => number;
 }
 
 interface ISortOffersPopup {

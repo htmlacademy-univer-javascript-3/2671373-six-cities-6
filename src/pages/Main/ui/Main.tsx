@@ -1,7 +1,7 @@
 import {OffersList} from '@/entities/Offer';
 import {cities, citiesCoords} from '@/shared/mocks';
 import {FC, useEffect, useMemo, useState} from 'react';
-import {Map} from '@/widgets/Map/ui';
+import {Map, TMapPoint} from '@/widgets/Map/ui';
 import {LocationsList} from './components/LocationsList';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
@@ -12,12 +12,13 @@ import {
   changeOfferFavoriteStatus,
   getFavoriteOffersList
 } from '@/shared/store';
-import {TLocation, TOffer} from '@/shared/model/offer';
+import {TOffer} from '@/shared/model/offer';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {AxiosResponse} from 'axios';
 import {SortOffersPopup} from '@/features/sort-offers/ui/SortOffersPopup';
 
 const sortingOptions = [
+  { value: 'Popular' },
   { value: 'Price: low to high', compareFunc: (a: TOffer, b: TOffer) => a.price - b.price },
   { value: 'Price: high to low', compareFunc: (a: TOffer, b: TOffer) => b.price - a.price },
   { value: 'Top rated first', compareFunc: (a: TOffer, b: TOffer) => b.rating - a.rating },
@@ -27,13 +28,13 @@ const MainPage: FC = () => {
 
   const [searchParams] = useSearchParams();
   const [offersSorting, setOfferSorting] = useState(sortingOptions[0]);
+  const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {offers, isLoading} = useSelector((state: RootState) => state.offers);
 
   const [activeCity, setActiveCity] = useState(searchParams.get('city') || cities[0]);
-  const [selectedPoint, setSelectedPoint] = useState<TLocation | undefined>(undefined);
 
   useEffect(() => {
     const city = searchParams.get('city');
@@ -55,9 +56,22 @@ const MainPage: FC = () => {
     await dispatch(getFavoriteOffersList());
   };
 
+  const handleSelectOffer = (offer?: TOffer) => {
+    if (!offer) {
+      setSelectedOffer(undefined);
+      return;
+    }
+    setSelectedOffer({id: offer.id, location: offer.location});
+  };
+
   const filteredOffers = useMemo(() => offers[activeCity] || [], [offers, activeCity]);
-  const sortedOffers = useMemo(() => [...filteredOffers].sort((a,b) => offersSorting.compareFunc(a,b)), [offersSorting, filteredOffers]);
-  const offerLocations = useMemo(() => filteredOffers.map((offer) => offer.location), [filteredOffers]);
+  const sortedOffers = useMemo(() => {
+    if (!offersSorting.compareFunc) {
+      return [...filteredOffers];
+    }
+    return [...filteredOffers].sort((a,b) => offersSorting.compareFunc(a,b));
+  }, [offersSorting, filteredOffers]);
+  const offerLocations = useMemo(() => filteredOffers.map((offer) => ({id: offer.id, location: offer.location})), [filteredOffers]);
 
   return (
     <div className="page page--gray page--main">
@@ -79,6 +93,7 @@ const MainPage: FC = () => {
                   <OffersList
                     offers={sortedOffers}
                     changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                    selectOffer={handleSelectOffer}
                   />
                 </div>
               </section>
@@ -86,8 +101,7 @@ const MainPage: FC = () => {
                 <Map
                   city={citiesCoords[activeCity]}
                   points={offerLocations}
-                  selectedPoint={selectedPoint}
-                  setSelectedPoint={setSelectedPoint}
+                  selectedPoint={selectedOffer}
                 />
               </div>
             </div>
