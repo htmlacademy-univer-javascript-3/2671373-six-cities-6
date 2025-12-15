@@ -1,20 +1,29 @@
 import {FC, useEffect} from 'react';
-import {AddReviewForm} from '@/features/add-review/ui/AddReviewForm';
 import {useSelector} from 'react-redux';
-import {getOfferById, RootState, useAppDispatch, getNearOffers, getComments} from '@/shared/store';
+import {getOfferById, RootState, useAppDispatch, getNearOffers, getComments, sendComment} from '@/shared/store';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Map} from '@/widgets/Map/ui';
 import {NearOffers} from './components/NearOffers';
 import {AxiosResponse} from 'axios';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
+import {Reviews} from '@/pages/Offer/ui/components/Reviews';
 
 const OfferPage: FC = () => {
 
-  const params = useParams();
+  const params = useParams<string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {currentOffer, isLoading} = useSelector((state: RootState) => state.offers);
   const {comments, isLoading: isCommentsLoading} = useSelector((state: RootState) => state.comments);
+
+  const sendCommentHandler = (comment: string, rating: number) => {
+    if (!params.id) {
+      return;
+    }
+    dispatch(sendComment({id: params.id, comment, rating})).then(() => {
+      dispatch(getComments(params.id as string));
+    });
+  };
 
   useEffect(() => {
     if (!params.id) {
@@ -116,42 +125,11 @@ const OfferPage: FC = () => {
                     <p className="offer__text">{currentOffer?.description}</p>
                   </div>
                 </div>
-                <section className="offer__reviews reviews">
-                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
-                  <LoadingWrapper isLoading={isCommentsLoading}>
-                    <ul className="reviews__list">
-                      {comments.map((comment) => (
-                        <li className="reviews__item" key={comment.id}>
-                          <div className="reviews__user user">
-                            <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                              <img
-                                className="reviews__avatar user__avatar"
-                                src={comment.user.avatarUrl}
-                                width="54"
-                                height="54"
-                                alt="Reviews avatar"
-                              />
-                            </div>
-                            <span className="reviews__user-name">{comment.user.name}</span>
-                          </div>
-                          {/*TODO make comment component*/}
-                          <div className="reviews__info">
-                            <div className="reviews__rating rating">
-                              <div className="reviews__stars rating__stars">
-                                <span style={{width: `${comment.rating * 20}%`}}></span>
-                                <span className="visually-hidden">Rating</span>
-                              </div>
-                            </div>
-                            <p className="reviews__text">{comment.comment}</p>
-                            {/*TODO add date lib*/}
-                            <time className="reviews__time" dateTime={comment.date}>{comment.date}</time>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </LoadingWrapper>
-                  {!!params.id && (<AddReviewForm id={params.id}/>)}
-                </section>
+                <Reviews
+                  comments={comments}
+                  isLoading={isCommentsLoading}
+                  sendComment={sendCommentHandler}
+                />
               </div>
             </div>
             <section className="offer__map map">

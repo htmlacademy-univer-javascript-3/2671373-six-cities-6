@@ -1,11 +1,9 @@
 import {FC} from 'react';
 import {RatingInput} from '@/shared/ui/RatingInput';
-import {
-  SubmitHandler, useForm} from 'react-hook-form';
-import {sendComment, useAppDispatch} from '@/shared/store';
+import {SubmitHandler, useForm} from 'react-hook-form';
 
 interface IAddReviewForm {
-  id: string;
+  sendComment: (comment: string, rating: number) => void;
 }
 
 type TReviewValues = {
@@ -15,8 +13,7 @@ type TReviewValues = {
 
 const AddReviewForm: FC<IAddReviewForm> = (props) => {
 
-  const { id } = props;
-  const dispatch = useAppDispatch();
+  const { sendComment } = props;
   const {register, setValue, handleSubmit, watch} = useForm<TReviewValues>({
     defaultValues: {
       rating: 5,
@@ -28,7 +25,7 @@ const AddReviewForm: FC<IAddReviewForm> = (props) => {
   const rating = watch('rating');
 
   const submitHandler: SubmitHandler<TReviewValues> = (values) => {
-    dispatch(sendComment({id, ...values}));
+    sendComment(values.comment, values.rating);
   };
 
   // TODO add submit errors handler
