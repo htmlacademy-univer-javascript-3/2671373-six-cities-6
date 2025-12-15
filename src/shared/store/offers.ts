@@ -5,12 +5,10 @@ import {AxiosError} from 'axios';
 
 type TOffersState = {
   isLoading: boolean;
-  error?: string;
   offers: Record<string, TOffer[]>;
   favorites: Record<string, TOffer[]>;
   currentOffer?: TOfferCard;
   isNearLoading: boolean;
-  nearError?: string;
   nearOffers: TOffer[];
 }
 
@@ -89,10 +87,8 @@ export const offersSlice = createSlice({
     });
     builder.addCase(getOffersList.pending, (state) => {
       state.isLoading = true;
-      state.error = undefined;
     });
     builder.addCase(getOffersList.rejected, (state) => {
-      state.error = 'error while getting offers';
       state.isLoading = false;
     });
     builder.addCase(getFavoriteOffersList.fulfilled, (state, action) => {
@@ -101,10 +97,8 @@ export const offersSlice = createSlice({
     });
     builder.addCase(getFavoriteOffersList.pending, (state) => {
       state.isLoading = true;
-      state.error = undefined;
     });
     builder.addCase(getFavoriteOffersList.rejected, (state) => {
-      state.error = 'error while getting favorite offers';
       state.isLoading = false;
     });
     builder.addCase(getOfferById.fulfilled, (state, action) => {
@@ -113,10 +107,8 @@ export const offersSlice = createSlice({
     });
     builder.addCase(getOfferById.pending, (state) => {
       state.isLoading = true;
-      state.error = undefined;
     });
     builder.addCase(getOfferById.rejected, (state) => {
-      state.error = 'error while getting offer';
       state.isLoading = false;
     });
     builder.addCase(getNearOffers.fulfilled, (state, action) => {
@@ -125,15 +117,10 @@ export const offersSlice = createSlice({
     });
     builder.addCase(getNearOffers.pending, (state) => {
       state.isNearLoading = true;
-      state.nearError = undefined;
     });
     builder.addCase(getNearOffers.rejected, (state) => {
-      state.nearError = 'error while getting nearby offers';
       state.isNearLoading = false;
     });
-    // builder.addCase(changeOfferFavoriteStatus.rejected, () => {});
-    // builder.addCase(changeOfferFavoriteStatus.pending, () => {});
-    // builder.addCase(changeOfferFavoriteStatus.rejected, () => {});
   }
 });
 

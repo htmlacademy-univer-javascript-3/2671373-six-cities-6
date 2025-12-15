@@ -8,7 +8,6 @@ type TAuthState = {
   authorizationStatus: boolean;
   profile?: TProfile;
   isLoading: boolean;
-  error?: string;
 }
 
 export const login = createAsyncThunk(
@@ -65,7 +64,6 @@ export const authSlice = createSlice({
     });
     builder.addCase(login.rejected, (state) => {
       state.isLoading = false;
-      state.error = 'error while login';
     });
     builder.addCase(checkAuth.pending, (state) => {
       state.isLoading = true;
