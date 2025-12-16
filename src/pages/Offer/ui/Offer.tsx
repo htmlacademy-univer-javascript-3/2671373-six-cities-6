@@ -2,8 +2,6 @@ import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {
   getOfferById,
-  RootState,
-  useAppDispatch,
   getNearOffers,
   getComments,
   sendComment,
@@ -17,13 +15,15 @@ import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {Reviews} from '@/pages/Offer/ui/components/Reviews';
 import {TOffer} from '@/shared/model/offer';
 import {selectOfferPageData} from '@/shared/store/selectors';
+import {State} from '@/shared/types';
+import {useAppDispatch} from '@/shared/hooks';
 
 const OfferPage: FC = () => {
 
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const selectState = useSelector((state: RootState) => state);
+  const selectState = useSelector((state: State) => state);
   const {
     nearbyOffers,
     currentOffer,
@@ -32,7 +32,7 @@ const OfferPage: FC = () => {
     isCurrentOfferLoading,
     isCommentsLoading
   } = selectOfferPageData(selectState);
-  const {authorizationStatus} = useSelector((state: RootState) => state.auth);
+  const {authorizationStatus} = useSelector((state: State) => state.auth);
   const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
   const sendCommentHandler = useCallback((comment: string, rating: number) => {

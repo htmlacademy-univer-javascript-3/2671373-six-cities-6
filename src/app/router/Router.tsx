@@ -1,9 +1,9 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import routes from './routes';
-import {useAppDispatch} from '@/shared/store';
 import {checkAuth} from '@/shared/store/auth.ts';
 import {useEffect} from 'react';
+import {useAppDispatch} from '@/shared/hooks';
 
 const Router = () => {
   const router = createBrowserRouter(routes);

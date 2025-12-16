@@ -1,9 +1,11 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
+import {getFavoriteOffersList} from '@/shared/store';
 import {logout} from '@/shared/store/auth.ts';
 import {useCallback, useEffect, useMemo} from 'react';
 import {selectProfileWithFavorites} from '@/shared/store/selectors';
+import {State} from '@/shared/types';
+import {useAppDispatch} from '@/shared/hooks';
 
 const HeaderNavNotLogged = () => (
   <nav className="header__nav">
@@ -21,7 +23,7 @@ const HeaderNavNotLogged = () => (
 
 const HeaderNavLogged = () => {
 
-  const selectState = useSelector((state: RootState) => state);
+  const selectState = useSelector((state: State) => state);
   const { profile, favorites } = selectProfileWithFavorites(selectState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -59,7 +61,7 @@ const HeaderNavLogged = () => {
 };
 
 const Header = () => {
-  const { authorizationStatus } = useSelector((state: RootState) => state.auth);
+  const { authorizationStatus } = useSelector((state: State) => state.auth);
 
   return (
     (

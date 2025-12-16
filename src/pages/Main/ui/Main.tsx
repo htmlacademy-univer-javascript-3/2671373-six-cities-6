@@ -6,8 +6,6 @@ import {LocationsList} from './components/LocationsList';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {
-  RootState,
-  useAppDispatch,
   getOffersList,
   changeOfferFavoriteStatus,
   getFavoriteOffersList
@@ -17,6 +15,8 @@ import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {AxiosResponse} from 'axios';
 import {SortOffersPopup} from '@/features/sort-offers/ui/SortOffersPopup';
 import * as classNames from 'classnames';
+import {useAppDispatch} from '@/shared/hooks';
+import {State} from '@/shared/types';
 
 const sortingOptions = [
   {value: 'Popular'},
@@ -33,7 +33,7 @@ const MainPage: FC = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {offers, isLoading} = useSelector((state: RootState) => state.offers);
+  const {offers, isLoading} = useSelector((state: State) => state.offers);
 
   const [activeCity, setActiveCity] = useState(searchParams.get('city') || cities[0]);
 

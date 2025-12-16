@@ -1,10 +1,10 @@
 import {FC} from 'react';
 import {Router} from '@/app/router';
 import {Provider} from 'react-redux';
-import { rootStore } from '@/shared/store';
+import { store } from '@/shared/store';
 
 const App: FC = () => (
-  <Provider store={rootStore}>
+  <Provider store={store}>
     <Router/>
   </Provider>
 );

@@ -1,15 +1,21 @@
 import {TOffer} from '@/shared/model/offer';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {api, apiRoute} from '@/shared/store/api';
+import {AppDispatch, State} from '@/shared/types';
+import {AxiosInstance} from 'axios';
+import {apiRoute} from '@/shared/constants';
 
 type TNearbyState = {
   isLoading: boolean;
   offers: TOffer[];
 }
 
-export const getNearOffers = createAsyncThunk(
+export const getNearOffers = createAsyncThunk<TOffer[], string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'nearby/getNearOffers',
-  async (id: string) => {
+  async (id, {extra: api}) => {
     const { data } = await api.get<TOffer[]>(`${apiRoute.offers}/${id}/nearby`);
     return data;
   }

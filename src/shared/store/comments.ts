@@ -1,6 +1,8 @@
-import {TComment} from '@/shared/model/comment';
+import {SendCommentDTO, TComment} from '@/shared/model/comment';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {api, apiRoute} from '@/shared/store/api';
+import {AppDispatch, State} from '@/shared/types';
+import {AxiosInstance} from 'axios';
+import {apiRoute} from '@/shared/constants';
 
 
 type TCommentsState = {
@@ -8,17 +10,25 @@ type TCommentsState = {
   isLoading: boolean;
 }
 
-export const getComments = createAsyncThunk(
+export const getComments = createAsyncThunk<TComment[], string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'comments/getComments',
-  async (id: string) => {
+  async (id, {extra: api}) => {
     const { data } = await api.get<TComment[]>(`${apiRoute.comments}/${id}`);
     return data;
   }
 );
 
-export const sendComment = createAsyncThunk(
+export const sendComment = createAsyncThunk<TComment, SendCommentDTO, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'comments/sendComment',
-  async ({id, ...body}:{id: string; comment: string; rating: number}) => {
+  async ({id, ...body}, {extra: api}) => {
     const { data } = await api.post<TComment>(`${apiRoute.comments}/${id}`, body);
     return data;
   }

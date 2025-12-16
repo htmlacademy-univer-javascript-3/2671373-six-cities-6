@@ -1,21 +1,26 @@
 import {TOfferCard} from '@/shared/model/offer';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {api, apiRoute} from '@/shared/store/api';
-import {AxiosError} from 'axios';
+import {AxiosError, AxiosInstance} from 'axios';
+import {apiRoute} from '@/shared/constants';
+import {AppDispatch, State} from '@/shared/types';
 
 type TCurrentOfferState = {
   currentOffer?: TOfferCard;
   isLoading: boolean;
 }
 
-export const getOfferById = createAsyncThunk(
+export const getOfferById = createAsyncThunk<TOfferCard, string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'currentOffer/getOfferById',
-  async (id: string, thunkAPI) => {
+  async (id: string, {rejectWithValue, extra: api}) => {
     try {
       const { data } = await api.get<TOfferCard>(`${apiRoute.offers}/${id}`);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as AxiosError).response);
+      return rejectWithValue((error as AxiosError).response);
     }
   }
 );

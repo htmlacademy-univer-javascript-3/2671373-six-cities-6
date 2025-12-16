@@ -1,8 +1,9 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {api, apiRoute} from '@/shared/store/api';
-import {TProfile} from '@/shared/model/auth';
-import {AxiosError} from 'axios';
+import {LoginDTO, TProfile} from '@/shared/model/auth';
+import {AxiosError, AxiosInstance} from 'axios';
 import Cookies from 'js-cookie';
+import {apiRoute} from '@/shared/constants';
+import {AppDispatch, State} from '@/shared/types';
 
 type TAuthState = {
   authorizationStatus: boolean;
@@ -10,31 +11,43 @@ type TAuthState = {
   isLoading: boolean;
 }
 
-export const login = createAsyncThunk(
+export const login = createAsyncThunk<TProfile, LoginDTO, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'auth/login',
-  async (data: {email: string; password: string}, thunkAPI) => {
+  async (data, { rejectWithValue, extra: api }) => {
     try {
       const response = await api.post<TProfile>(apiRoute.login, data);
       Cookies.set('token', response.data.token);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as AxiosError).response);
+      return rejectWithValue((error as AxiosError).response);
     }
   }
 );
 
-export const logout = createAsyncThunk(
+export const logout = createAsyncThunk<TProfile, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'auth/logout',
-  async () => {
+  async (_, {extra: api}) => {
     const response = await api.get<TProfile>(apiRoute.logout);
     Cookies.remove('token');
     return response.data;
   }
 );
 
-export const checkAuth = createAsyncThunk(
+export const checkAuth = createAsyncThunk<TProfile, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'auth/checkAuth',
-  async () => {
+  async (_, {extra: api}) => {
     const response = await api.get<TProfile>(apiRoute.login);
     return response.data;
   }

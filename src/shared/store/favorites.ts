@@ -1,16 +1,21 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {api, apiRoute} from '@/shared/store/api';
-import {TOffer} from '@/shared/model/offer';
-import {AxiosError} from 'axios';
+import {ChangeOfferFavoriteStatusDTO, TOffer} from '@/shared/model/offer';
+import {AxiosError, AxiosInstance} from 'axios';
+import {AppDispatch, State} from '@/shared/types';
+import {apiRoute} from '@/shared/constants';
 
 type TFavoritesState = {
   isLoading: boolean;
   favorites: Record<string, TOffer[]>;
 }
 
-export const getFavoriteOffersList = createAsyncThunk(
+export const getFavoriteOffersList = createAsyncThunk<Record<string, TOffer[]>, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'favorites/getFavoriteOffersList',
-  async () => {
+  async (_, {extra: api}) => {
     const { data } = await api.get<TOffer[]>(apiRoute.favorite);
     return data.reduce((acc, curr) => {
       if (!acc[curr.city.name]) {
@@ -22,14 +27,18 @@ export const getFavoriteOffersList = createAsyncThunk(
   }
 );
 
-export const changeOfferFavoriteStatus = createAsyncThunk(
+export const changeOfferFavoriteStatus = createAsyncThunk<TOffer, ChangeOfferFavoriteStatusDTO, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'favorites/changeOfferFavoriteStatus',
-  async ({id, favorite}:{id: string; favorite: boolean}, thunkAPI) => {
+  async ({id, favorite}, {rejectWithValue, extra: api}) => {
     try {
       const {data} = await api.post<TOffer>(`${apiRoute.favorite}/${id}/${favorite ? 1 : 0}`);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as AxiosError).response);
+      return rejectWithValue((error as AxiosError).response);
     }
   }
 );
