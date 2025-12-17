@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import routes from './routes';
-import {checkAuth} from '@/shared/store/auth.ts';
+import {checkAuth} from '@/shared/store/slices/auth/auth.ts';
 import {useEffect} from 'react';
 import {useAppDispatch} from '@/shared/hooks';
 

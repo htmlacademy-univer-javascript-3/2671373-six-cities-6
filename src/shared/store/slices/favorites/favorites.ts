@@ -48,13 +48,13 @@ const initialState = {
   isLoading: false
 } as TFavoritesState;
 
-const favoritesSlice = createSlice({
+export const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getFavoriteOffersList.fulfilled, (state, action) => {
-      state.favorites = action.payload;
+      state.favorites = action.payload || {};
       state.isLoading = false;
     });
     builder.addCase(getFavoriteOffersList.pending, (state) => {

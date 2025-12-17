@@ -4,7 +4,6 @@ import {AppDispatch, State} from '@/shared/types';
 import {AxiosInstance} from 'axios';
 import {apiRoute} from '@/shared/constants';
 
-
 type TCommentsState = {
   comments: TComment[];
   isLoading: boolean;
@@ -45,7 +44,7 @@ export const commentsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getComments.fulfilled, (state, action) => {
-      state.comments = action.payload;
+      state.comments = action.payload || [];
       state.isLoading = false;
     });
     builder.addCase(getComments.pending, (state) => {

@@ -1,9 +1,9 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {LoginDTO, TProfile} from '@/shared/model/auth';
 import {AxiosError, AxiosInstance} from 'axios';
-import Cookies from 'js-cookie';
 import {apiRoute} from '@/shared/constants';
 import {AppDispatch, State} from '@/shared/types';
+import {deleteToken, getToken, saveToken} from '@/shared/services';
 
 type TAuthState = {
   authorizationStatus: boolean;
@@ -20,7 +20,7 @@ export const login = createAsyncThunk<TProfile, LoginDTO, {
   async (data, { rejectWithValue, extra: api }) => {
     try {
       const response = await api.post<TProfile>(apiRoute.login, data);
-      Cookies.set('token', response.data.token);
+      saveToken(response.data.token);
       return response.data;
     } catch (error) {
       return rejectWithValue((error as AxiosError).response);
@@ -36,7 +36,7 @@ export const logout = createAsyncThunk<TProfile, undefined, {
   'auth/logout',
   async (_, {extra: api}) => {
     const response = await api.get<TProfile>(apiRoute.logout);
-    Cookies.remove('token');
+    deleteToken();
     return response.data;
   }
 );
@@ -54,18 +54,14 @@ export const checkAuth = createAsyncThunk<TProfile, undefined, {
 );
 
 const initialState = {
-  authorizationStatus: !!Cookies.get('token'),
+  authorizationStatus: !!getToken(),
   isLoading: false,
 } as TAuthState;
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    setAuthorizationStatus: (state, action: PayloadAction<boolean>) => {
-      state.authorizationStatus = action.payload;
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.isLoading = true;
@@ -77,6 +73,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(login.rejected, (state) => {
       state.isLoading = false;
+      state.authorizationStatus = false;
     });
     builder.addCase(checkAuth.pending, (state) => {
       state.isLoading = true;
@@ -91,9 +88,18 @@ export const authSlice = createSlice({
       state.profile = undefined;
       state.authorizationStatus = false;
     });
+    builder.addCase(logout.fulfilled, (state) => {
+      state.isLoading = false;
+      state.profile = undefined;
+      state.authorizationStatus = false;
+    });
+    builder.addCase(logout.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(logout.rejected, (state) => {
+      state.isLoading = false;
+    });
   }
 });
-
-export const { setAuthorizationStatus } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

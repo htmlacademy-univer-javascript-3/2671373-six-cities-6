@@ -1,7 +1,7 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {getFavoriteOffersList} from '@/shared/store';
-import {logout} from '@/shared/store/auth.ts';
+import {logout} from '@/shared/store/slices/auth/auth.ts';
 import {useCallback, useEffect, useMemo} from 'react';
 import {selectProfileWithFavorites} from '@/shared/store/selectors';
 import {State} from '@/shared/types';

@@ -1,10 +1,12 @@
 import {combineReducers} from '@reduxjs/toolkit';
-import {authReducer} from './auth.ts';
-import {commentsReducer} from './comments.ts';
-import {nearbyReducer} from './nearby.ts';
-import {currentOfferReducer} from './currentOffer.ts';
-import {offersReducer} from './offers.ts';
-import {favoritesReducer} from './favorites.ts';
+import {
+  authReducer,
+  commentsReducer,
+  nearbyReducer,
+  currentOfferReducer,
+  offersReducer,
+  favoritesReducer
+} from './slices';
 
 export const rootReducer = combineReducers({
   offers: offersReducer,

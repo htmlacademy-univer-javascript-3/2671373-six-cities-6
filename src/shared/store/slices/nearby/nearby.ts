@@ -32,7 +32,7 @@ export const nearbySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getNearOffers.fulfilled, (state, action) => {
-      state.offers = action.payload;
+      state.offers = action.payload || [];
       state.isLoading = false;
     });
     builder.addCase(getNearOffers.pending, (state) => {
