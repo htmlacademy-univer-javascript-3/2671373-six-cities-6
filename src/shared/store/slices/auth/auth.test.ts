@@ -1,4 +1,5 @@
-import {authSlice, checkAuth, login, logout} from './auth.ts';
+import {authSlice} from './auth';
+import {checkAuth, login, logout} from './actions';
 
 describe('Auth Slice', () => {
   it('Should return the initial state with empty action', () => {

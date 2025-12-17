@@ -1,37 +1,11 @@
-import {SendCommentDTO, TComment} from '@/shared/model/comment';
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {AppDispatch, State} from '@/shared/types';
-import {AxiosInstance} from 'axios';
-import {apiRoute} from '@/shared/constants';
+import {TComment} from '@/shared/model/comment';
+import {createSlice} from '@reduxjs/toolkit';
+import { getComments } from './actions';
 
 type TCommentsState = {
   comments: TComment[];
   isLoading: boolean;
 }
-
-export const getComments = createAsyncThunk<TComment[], string, {
-  dispatch: AppDispatch;
-  state: State;
-  extra: AxiosInstance;
-}>(
-  'comments/getComments',
-  async (id, {extra: api}) => {
-    const { data } = await api.get<TComment[]>(`${apiRoute.comments}/${id}`);
-    return data;
-  }
-);
-
-export const sendComment = createAsyncThunk<TComment, SendCommentDTO, {
-  dispatch: AppDispatch;
-  state: State;
-  extra: AxiosInstance;
-}>(
-  'comments/sendComment',
-  async ({id, ...body}, {extra: api}) => {
-    const { data } = await api.post<TComment>(`${apiRoute.comments}/${id}`, body);
-    return data;
-  }
-);
 
 const initialState = {
   comments: [],

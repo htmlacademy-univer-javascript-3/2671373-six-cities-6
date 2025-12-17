@@ -1,4 +1,5 @@
-import { nearbySlice, getNearOffers } from './nearby';
+import { nearbySlice } from './nearby';
+import { getNearOffers } from './actions';
 
 describe('Nearby Slice', () => {
   it('Should return the initial state with empty action', () => {

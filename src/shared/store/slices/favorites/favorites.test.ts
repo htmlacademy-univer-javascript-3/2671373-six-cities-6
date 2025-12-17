@@ -1,4 +1,5 @@
-import { favoritesSlice, getFavoriteOffersList } from './favorites';
+import { favoritesSlice } from './favorites';
+import { getFavoriteOffersList } from './actions';
 
 describe('Favorites Slice', () => {
   it('Should return the initial state with empty action', () => {

@@ -1,7 +1,7 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {getFavoriteOffersList} from '@/shared/store';
-import {logout} from '@/shared/store/slices/auth/auth.ts';
+import {logout} from '@/shared/store';
 import {useCallback, useEffect, useMemo} from 'react';
 import {selectProfileWithFavorites} from '@/shared/store/selectors';
 import {State} from '@/shared/types';
@@ -70,7 +70,7 @@ const Header = () => {
           <div className="header__wrapper">
             <div className="header__left">
               <Link className="header__logo-link header__logo-link--active" to='/'>
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
+                <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41"/>
               </Link>
             </div>
             {authorizationStatus ? <HeaderNavLogged/> : <HeaderNavNotLogged/>}

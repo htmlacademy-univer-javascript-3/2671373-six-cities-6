@@ -1,1 +1,2 @@
-export * from './currentOffer.ts';
+export * from './currentOffer';
+export * from './actions';

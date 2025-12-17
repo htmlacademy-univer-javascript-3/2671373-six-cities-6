@@ -1,1 +1,2 @@
-export * from './nearby.ts';
+export * from './nearby';
+export * from './actions';

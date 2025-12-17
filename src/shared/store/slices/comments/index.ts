@@ -1,1 +1,2 @@
-export * from './comments.ts';
+export * from './comments';
+export * from './actions';

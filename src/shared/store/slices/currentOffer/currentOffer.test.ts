@@ -1,4 +1,5 @@
-import {currentOfferSlice, getOfferById} from './currentOffer.ts';
+import {currentOfferSlice} from './currentOffer';
+import { getOfferById } from './actions';
 
 describe('CurrentOffer Slice', () => {
   it('Should return the initial state with empty action', () => {

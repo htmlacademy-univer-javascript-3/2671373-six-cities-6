@@ -1,4 +1,5 @@
-import {commentsSlice, getComments} from './comments.ts';
+import {commentsSlice} from './comments';
+import { getComments } from './actions';
 
 describe('Comments Slice', () => {
   it('Should return the initial state with empty action', () => {

@@ -1,4 +1,5 @@
-import { offersSlice, getOffersList } from './offers';
+import { offersSlice } from './offers';
+import { getOffersList } from './actions';
 
 describe('Offers Slice', () => {
   it('Should return the initial state with empty action', () => {
