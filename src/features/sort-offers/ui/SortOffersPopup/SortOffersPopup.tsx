@@ -1,9 +1,10 @@
 import {Dispatch, FC, useState} from 'react';
 import * as classNames from 'classnames';
+import {TOffer} from '@/shared/model/offer';
 
 export type TSorting = {
   value: string;
-  compareFunc?: (a: any, b: any) => number;
+  compareFunc?: (a: TOffer, b: TOffer) => number;
 }
 
 interface ISortOffersPopup {

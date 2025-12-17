@@ -14,7 +14,7 @@ import {TOffer} from '@/shared/model/offer';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {AxiosResponse} from 'axios';
 import {SortOffersPopup} from '@/features/sort-offers/ui/SortOffersPopup';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {useAppDispatch} from '@/shared/hooks';
 import {State} from '@/shared/types';
 
