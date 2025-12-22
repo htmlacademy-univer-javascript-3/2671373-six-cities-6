@@ -3,7 +3,7 @@ import {OffersList} from '@/entities/Offer';
 import {changeOfferFavoriteStatus, getFavoriteOffersList} from '@/shared/store';
 import {useSelector} from 'react-redux';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {useAppDispatch} from '@/shared/hooks';
 import {State} from '@/shared/types';
 

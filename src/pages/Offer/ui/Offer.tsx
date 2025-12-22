@@ -23,7 +23,6 @@ const OfferPage: FC = () => {
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const selectState = useSelector((state: State) => state);
   const {
     nearbyOffers,
     currentOffer,
@@ -31,7 +30,7 @@ const OfferPage: FC = () => {
     comments,
     isCurrentOfferLoading,
     isCommentsLoading
-  } = selectOfferPageData(selectState);
+  } = useSelector(selectOfferPageData);
   const {authorizationStatus} = useSelector((state: State) => state.auth);
   const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
@@ -102,7 +101,7 @@ const OfferPage: FC = () => {
                   </div>
                 )}
                 <div className="offer__name-wrapper">
-                  <h1 className="offer__name">
+                  <h1 className="offer__name" data-testid="offer-name">
                     {currentOffer?.title}
                   </h1>
                   <button className="offer__bookmark-button button" type="button">

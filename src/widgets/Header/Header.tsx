@@ -22,9 +22,7 @@ const HeaderNavNotLogged = () => (
 );
 
 const HeaderNavLogged = () => {
-
-  const selectState = useSelector((state: State) => state);
-  const { profile, favorites } = selectProfileWithFavorites(selectState);
+  const { profile, favorites } = useSelector(selectProfileWithFavorites);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

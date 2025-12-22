@@ -1,5 +1,5 @@
 import {Dispatch, FC, useState} from 'react';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {TOffer} from '@/shared/model/offer';
 
 export type TSorting = {

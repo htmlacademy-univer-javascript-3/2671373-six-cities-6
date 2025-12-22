@@ -1,9 +1,10 @@
 import {RouteObject} from 'react-router-dom';
-import {privateRouteLoader} from '@/app/router/loader';
+import {loginRouteLoader, privateRouteLoader} from '@/app/router/loader';
 
 const routes: RouteObject[] = [
   {
     path: '/',
+    HydrateFallback: () => <div data-testid='loader'>Loading...</div>,
     async lazy() {
       const { MainLayout } = await import('@/app/layout/MainLayout');
       return { Component: MainLayout };
@@ -20,6 +21,7 @@ const routes: RouteObject[] = [
   },
   {
     path: '/',
+    HydrateFallback: () => <div data-testid='loader'>Loading...</div>,
     async lazy() {
       const { BaseLayout } = await import('@/app/layout/BaseLayout');
       return { Component: BaseLayout };
@@ -44,9 +46,11 @@ const routes: RouteObject[] = [
   },
   {
     path: '/login',
+    HydrateFallback: () => <div data-testid='loader'>Loading...</div>,
     children: [
       {
         index: true,
+        loader: loginRouteLoader,
         async lazy() {
           const {LoginPage} = await import('@/pages/Login');
           return {Component: LoginPage};
@@ -56,6 +60,7 @@ const routes: RouteObject[] = [
   },
   {
     path: '*',
+    HydrateFallback: () => <div data-testid='loader'>Loading...</div>,
     async lazy() {
       const { NotFoundPage } = await import('@/pages/NotFound');
       return { Component: NotFoundPage };

@@ -1,5 +1,5 @@
 import {FC, memo} from 'react';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {Link} from 'react-router-dom';
 
 interface ILocationsList {
