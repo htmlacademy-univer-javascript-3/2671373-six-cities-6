@@ -1,25 +1,11 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import {TOffer} from '@/shared/model/offer';
-import {apiRoute, api} from '@/shared/store/api';
+import {getOffersList} from './actions';
 
 type TOffersState = {
   isLoading: boolean;
   offers: Record<string, TOffer[]>;
 }
-
-export const getOffersList = createAsyncThunk(
-  'offers/getOffersListByLocation',
-  async () => {
-    const { data } = await api.get<TOffer[]>(apiRoute.offers);
-    return data.reduce((acc, curr) => {
-      if (!acc[curr.city.name]) {
-        acc[curr.city.name] = [];
-      }
-      acc[curr.city.name].push(curr);
-      return acc;
-    }, {} as Record<string, TOffer[]>);
-  }
-);
 
 const initialState = {
   isLoading: false,
@@ -32,7 +18,7 @@ export const offersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getOffersList.fulfilled, (state, action) => {
-      state.offers = action.payload;
+      state.offers = action.payload || {};
       state.isLoading = false;
     });
     builder.addCase(getOffersList.pending, (state) => {

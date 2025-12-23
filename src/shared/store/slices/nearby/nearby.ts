@@ -1,19 +1,11 @@
 import {TOffer} from '@/shared/model/offer';
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {api, apiRoute} from '@/shared/store/api';
+import {createSlice} from '@reduxjs/toolkit';
+import { getNearOffers } from './actions';
 
 type TNearbyState = {
   isLoading: boolean;
   offers: TOffer[];
 }
-
-export const getNearOffers = createAsyncThunk(
-  'nearby/getNearOffers',
-  async (id: string) => {
-    const { data } = await api.get<TOffer[]>(`${apiRoute.offers}/${id}/nearby`);
-    return data;
-  }
-);
 
 const initialState = {
   isLoading: false,
@@ -26,7 +18,7 @@ export const nearbySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getNearOffers.fulfilled, (state, action) => {
-      state.offers = action.payload;
+      state.offers = action.payload || [];
       state.isLoading = false;
     });
     builder.addCase(getNearOffers.pending, (state) => {

@@ -1,9 +1,9 @@
 import {redirect} from 'react-router-dom';
-import Cookies from 'js-cookie';
+import {getToken} from '@/shared/services';
 
 const privateRouteLoader = () => {
 
-  const token = Cookies.get('token');
+  const token = getToken();
 
   if (!token) {
     throw redirect('/login');

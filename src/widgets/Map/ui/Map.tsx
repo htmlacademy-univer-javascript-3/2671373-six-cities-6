@@ -12,8 +12,9 @@ const Map: FC<IMap> = memo((props: IMap) => {
   const map = useMap(containerRef, city);
 
   useEffect(() => {
-    if (map.current) {
-      const markerLayer = layerGroup().addTo(map.current);
+    const mapRef = map.current;
+    if (mapRef) {
+      const markerLayer = layerGroup().addTo(mapRef);
       points.forEach((point) => {
         const marker = new Marker({
           lat: point.location.latitude,
@@ -30,16 +31,16 @@ const Map: FC<IMap> = memo((props: IMap) => {
       });
 
       if (selectedPoint) {
-        map.current.setView({lat: selectedPoint.location.latitude, lng: selectedPoint.location.longitude}, selectedPoint.location.zoom);
+        mapRef.setView({lat: selectedPoint.location.latitude, lng: selectedPoint.location.longitude}, selectedPoint.location.zoom);
       } else {
-        map.current.setView({lat: city.location.latitude, lng: city.location.longitude}, city.location.zoom);
+        mapRef.setView({lat: city.location.latitude, lng: city.location.longitude}, city.location.zoom);
       }
 
       return () => {
-        map.current?.removeLayer(markerLayer);
+        mapRef?.removeLayer(markerLayer);
       };
     }
-  }, [map, points, selectedPoint]);
+  }, [city, map, points, selectedPoint]);
 
   return (
     <div

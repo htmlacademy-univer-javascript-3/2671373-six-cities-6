@@ -1,8 +1,9 @@
 import {FC, useState} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {useAppDispatch, login} from '@/shared/store';
+import {login} from '@/shared/store';
 import {useNavigate} from 'react-router-dom';
 import {AxiosResponse} from 'axios';
+import {useAppDispatch} from '@/shared/hooks';
 
 type TLoginData = {
   email: string;
@@ -13,7 +14,7 @@ const LoginPage: FC = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [errors, setErrors] = useState<Record<string, any>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { handleSubmit, register } = useForm<TLoginData>({
     defaultValues: {

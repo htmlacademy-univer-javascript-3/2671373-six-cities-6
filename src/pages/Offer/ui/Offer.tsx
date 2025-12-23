@@ -2,8 +2,6 @@ import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {
   getOfferById,
-  RootState,
-  useAppDispatch,
   getNearOffers,
   getComments,
   sendComment,
@@ -17,13 +15,14 @@ import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
 import {Reviews} from '@/pages/Offer/ui/components/Reviews';
 import {TOffer} from '@/shared/model/offer';
 import {selectOfferPageData} from '@/shared/store/selectors';
+import {State} from '@/shared/types';
+import {useAppDispatch} from '@/shared/hooks';
 
 const OfferPage: FC = () => {
 
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const selectState = useSelector((state: RootState) => state);
   const {
     nearbyOffers,
     currentOffer,
@@ -31,8 +30,8 @@ const OfferPage: FC = () => {
     comments,
     isCurrentOfferLoading,
     isCommentsLoading
-  } = selectOfferPageData(selectState);
-  const {authorizationStatus} = useSelector((state: RootState) => state.auth);
+  } = useSelector(selectOfferPageData);
+  const {authorizationStatus} = useSelector((state: State) => state.auth);
   const [selectedOffer, setSelectedOffer] = useState<TMapPoint>();
 
   const sendCommentHandler = useCallback((comment: string, rating: number) => {
@@ -102,7 +101,7 @@ const OfferPage: FC = () => {
                   </div>
                 )}
                 <div className="offer__name-wrapper">
-                  <h1 className="offer__name">
+                  <h1 className="offer__name" data-testid="offer-name">
                     {currentOffer?.title}
                   </h1>
                   <button className="offer__bookmark-button button" type="button">

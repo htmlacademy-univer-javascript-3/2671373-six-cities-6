@@ -1,9 +1,11 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
-import {logout} from '@/shared/store/auth.ts';
+import {getFavoriteOffersList} from '@/shared/store';
+import {logout} from '@/shared/store';
 import {useCallback, useEffect, useMemo} from 'react';
 import {selectProfileWithFavorites} from '@/shared/store/selectors';
+import {State} from '@/shared/types';
+import {useAppDispatch} from '@/shared/hooks';
 
 const HeaderNavNotLogged = () => (
   <nav className="header__nav">
@@ -20,9 +22,7 @@ const HeaderNavNotLogged = () => (
 );
 
 const HeaderNavLogged = () => {
-
-  const selectState = useSelector((state: RootState) => state);
-  const { profile, favorites } = selectProfileWithFavorites(selectState);
+  const { profile, favorites } = useSelector(selectProfileWithFavorites);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -59,7 +59,7 @@ const HeaderNavLogged = () => {
 };
 
 const Header = () => {
-  const { authorizationStatus } = useSelector((state: RootState) => state.auth);
+  const { authorizationStatus } = useSelector((state: State) => state.auth);
 
   return (
     (
@@ -68,7 +68,7 @@ const Header = () => {
           <div className="header__wrapper">
             <div className="header__left">
               <Link className="header__logo-link header__logo-link--active" to='/'>
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
+                <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41"/>
               </Link>
             </div>
             {authorizationStatus ? <HeaderNavLogged/> : <HeaderNavNotLogged/>}

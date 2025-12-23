@@ -1,9 +1,9 @@
-import {RootState} from '@/shared/store';
 import {createSelector} from '@reduxjs/toolkit';
+import {State} from '@/shared/types';
 
-const selectCurrentOffer = (state: RootState) => state.currentOffer;
-const selectComments = (state: RootState) => state.comments;
-const selectNearby = (state: RootState) => state.nearby;
+const selectCurrentOffer = (state: State) => state.currentOffer;
+const selectComments = (state: State) => state.comments;
+const selectNearby = (state: State) => state.nearby;
 
 export const selectOfferPageData = createSelector(
   [selectComments, selectNearby, selectCurrentOffer],

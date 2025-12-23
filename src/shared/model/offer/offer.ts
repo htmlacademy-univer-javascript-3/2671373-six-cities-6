@@ -39,7 +39,7 @@ export type TOffer = {
 export type TOfferCard = {
   id: string;
   title: string;
-  type: string;
+  type: EOfferType;
   price: number;
   city: TCity;
   location: TLocation;

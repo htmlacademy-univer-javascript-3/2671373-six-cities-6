@@ -1,14 +1,16 @@
 import {FC, useCallback, useEffect} from 'react';
 import {OffersList} from '@/entities/Offer';
-import {changeOfferFavoriteStatus, getFavoriteOffersList, RootState, useAppDispatch} from '@/shared/store';
+import {changeOfferFavoriteStatus, getFavoriteOffersList} from '@/shared/store';
 import {useSelector} from 'react-redux';
 import {LoadingWrapper} from '@/shared/ui/LoadingWrapper';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
+import {useAppDispatch} from '@/shared/hooks';
+import {State} from '@/shared/types';
 
 const FavoritesPage: FC = () => {
 
   const dispatch = useAppDispatch();
-  const {favorites, isLoading} = useSelector((state: RootState) => state.favorites);
+  const {favorites, isLoading} = useSelector((state: State) => state.favorites);
 
   useEffect(() => {
     dispatch(getFavoriteOffersList());
