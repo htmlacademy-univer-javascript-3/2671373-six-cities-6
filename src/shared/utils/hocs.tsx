@@ -6,6 +6,7 @@ import {Action} from '@reduxjs/toolkit';
 import {AppThunkDispatch} from '@/shared/utils/mocks.ts';
 import MockAdapter from 'axios-mock-adapter';
 import {Provider} from 'react-redux';
+import {BrowserRouter} from 'react-router-dom';
 
 export const withStore = (component: JSX.Element, initialState?: Partial<State>) => {
   const axios = createApi();
@@ -20,3 +21,11 @@ export const withStore = (component: JSX.Element, initialState?: Partial<State>)
     mockStore
   };
 };
+
+export const withRouter = (component: JSX.Element) => ({
+  component: (
+    <BrowserRouter>
+      {component}
+    </BrowserRouter>
+  )
+});

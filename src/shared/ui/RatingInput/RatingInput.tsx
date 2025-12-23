@@ -29,6 +29,7 @@ const RatingInput: FC<IRatingInput> = (props) => {
         return (
           <Fragment key={id}>
             <input
+              data-testid={`rating-radio-${count}`}
               className="form__rating-input visually-hidden"
               name="rating"
               value={count}

@@ -11,5 +11,6 @@ describe('Component: Rating', () => {
     );
 
     expect(screen.getByText('Rating')).toBeInTheDocument();
+    expect(screen.getByTestId('rating-span')).toHaveStyle(`width: ${mockRating * 20}%`);
   });
 });

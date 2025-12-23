@@ -11,7 +11,12 @@ const LoadingWrapper: FC<PropsWithChildren<ILoadingWrapper>> = (props) => {
 
   if (isLoading) {
     return (
-      <ClipLoader cssOverride={{margin: '0 auto'}} loading size={150}/>
+      <ClipLoader
+        data-testid="loading-wrapper"
+        cssOverride={{margin: '0 auto'}}
+        loading
+        size={150}
+      />
     );
   }
 
