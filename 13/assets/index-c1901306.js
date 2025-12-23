@@ -1,0 +1,1 @@
+import{j as o,L as e}from"./index-f8caaf10.js";const t=()=>o.jsxs("div",{style:{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",gap:"16px"},children:[o.jsx("h1",{children:"404 Not Found"}),o.jsx(e,{to:"/",children:"Go home"})]}),s=t;export{s as NotFoundPage};
