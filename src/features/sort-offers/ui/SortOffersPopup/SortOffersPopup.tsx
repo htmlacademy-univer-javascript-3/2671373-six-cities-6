@@ -19,21 +19,30 @@ const SortOffersPopup: FC<ISortOffersPopup> = (props) => {
   const {sorting, setSorting, options} = props;
 
   return (
-    <form className="places__sorting" action="#" method="get">
+    <form
+      data-testid="sort-offers-popup-form"
+      className="places__sorting"
+      action="#"
+      method="get"
+    >
       <span className="places__sorting-caption" >Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={() => setOpen((p) => !p)}>
+      <span data-testid="sort-offers-popup-btn" className="places__sorting-type" tabIndex={0} onClick={() => setOpen((p) => !p)}>
         {sorting.value}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      <ul className={classNames('places__options places__options--custom', open && 'places__options--opened')}>
+      <ul
+        data-testid="sort-offers-popup-list"
+        className={classNames('places__options places__options--custom', open && 'places__options--opened')}
+      >
         {options.map((option) => (
           <li
             className={classNames('places__option', sorting.value === option.value && 'places__option--active')}
             key={option.value}
             tabIndex={0}
             onClick={() => setSorting(option)}
+            data-testid="sort-offers-popup-option"
           >
             {option.value}
           </li>

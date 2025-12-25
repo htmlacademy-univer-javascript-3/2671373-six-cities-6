@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, FormEventHandler, useState} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {login} from '@/shared/store';
 import {useNavigate} from 'react-router-dom';
@@ -23,21 +23,24 @@ const LoginPage: FC = () => {
     }
   });
 
-  const submitHandler: SubmitHandler<TLoginData> = (values) => {
-    dispatch(login(values)).then((r) => {
-      const payload = r.payload as AxiosResponse;
-      if ('status' in payload) {
-        const errorData = payload.data as {details: {messages: string[]; property: string; value: string}[]};
-        const fieldErrors: Record<string, string> = errorData.details.reduce((acc, curr) => {
-          acc[curr.property] = curr.messages[0];
-          return acc;
-        }, {} as Record<string, string>);
-        setErrors(fieldErrors);
-        return;
+  const submitHandler: SubmitHandler<TLoginData> = async (values) => {
+    const r = await dispatch(login(values));
+    const payload = r.payload as AxiosResponse;
+    if ('status' in payload) {
+      const errorData = payload.data as { details: { messages: string[]; property: string; value: string }[] };
+      const fieldErrors: Record<string, string> = errorData.details.reduce((acc, curr) => {
+        acc[curr.property] = curr.messages[0];
+        return acc;
+      }, {} as Record<string, string>);
+      setErrors(fieldErrors);
+      return;
 
-      }
-      navigate('/');
-    });
+    }
+    navigate('/');
+  };
+
+  const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    handleSubmit(submitHandler)(event);
   };
 
   return (
@@ -47,8 +50,9 @@ const LoginPage: FC = () => {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-            <form onSubmit={handleSubmit(submitHandler)}
+            <form
+              onSubmit={onSubmit}
+              data-testid="login-form"
               className="login__form form"
               action="#"
               method="post"
@@ -57,6 +61,7 @@ const LoginPage: FC = () => {
                 <label className="visually-hidden">E-mail</label>
                 <input
                   {...register('email')}
+                  data-testid="login-form-email"
                   className="login__input form__input"
                   type="email"
                   placeholder="Email"
@@ -68,6 +73,7 @@ const LoginPage: FC = () => {
                 <label className="visually-hidden">Password</label>
                 <input
                   {...register('password')}
+                  data-testid="login-form-password"
                   className="login__input form__input"
                   type="password"
                   placeholder="Password"
@@ -75,7 +81,13 @@ const LoginPage: FC = () => {
                 />
                 {errors['password'] && <p>{errors['password']}</p>}
               </div>
-              <button className="login__submit form__submit button" type="submit">Sign in</button>
+              <button
+                className="login__submit form__submit button"
+                type="submit"
+                data-testid="login-form-submit"
+              >
+                Sign in
+              </button>
             </form>
           </section>
           <section className="locations locations--login locations--current">

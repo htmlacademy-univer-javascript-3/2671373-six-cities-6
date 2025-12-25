@@ -96,12 +96,18 @@ const OfferPage: FC = () => {
             <div className="offer__container container">
               <div className="offer__wrapper">
                 {currentOffer?.isPremium && (
-                  <div className="offer__mark">
+                  <div
+                    data-testid="offer-card-premium"
+                    className="offer__mark"
+                  >
                     <span>Premium</span>
                   </div>
                 )}
                 <div className="offer__name-wrapper">
-                  <h1 className="offer__name" data-testid="offer-name">
+                  <h1
+                    className="offer__name"
+                    data-testid="offer-card-name"
+                  >
                     {currentOffer?.title}
                   </h1>
                   <button className="offer__bookmark-button button" type="button">
@@ -116,9 +122,17 @@ const OfferPage: FC = () => {
                     <span style={{width: `${(currentOffer?.rating || 5) * 20}%`}}></span>
                     <span className="visually-hidden">Rating</span>
                   </div>
-                  <span className="offer__rating-value rating__value">{currentOffer?.rating}</span>
+                  <span
+                    className="offer__rating-value rating__value"
+                    data-testid="offer-card-rating"
+                  >
+                    {currentOffer?.rating}
+                  </span>
                 </div>
-                <ul className="offer__features">
+                <ul
+                  className="offer__features"
+                  data-testid="offer-card-features"
+                >
                   <li className="offer__feature offer__feature--entire">
                     {currentOffer?.type}
                   </li>
@@ -129,11 +143,17 @@ const OfferPage: FC = () => {
                     Max {currentOffer?.maxAdults} adults
                   </li>
                 </ul>
-                <div className="offer__price">
+                <div
+                  className="offer__price"
+                  data-testid="offer-card-price"
+                >
                   <b className="offer__price-value">&euro;{currentOffer?.price}</b>
                   <span className="offer__price-text">&nbsp;night</span>
                 </div>
-                <div className="offer__inside">
+                <div
+                  className="offer__inside"
+                  data-testid="offer-card-inside"
+                >
                   <h2 className="offer__inside-title">What&apos;s inside</h2>
                   <ul className="offer__inside-list">
                     {currentOffer?.goods.map((good) => (
@@ -156,7 +176,7 @@ const OfferPage: FC = () => {
                       />
                     </div>
                     <span className="offer__user-name">{currentOffer?.host.name}</span>
-                    {currentOffer?.host.isPro && (<span className="offer__user-status">Pro</span>)}
+                    {currentOffer?.host.isPro && (<span className="offer__user-status" data-testid="offer-card-host-pro">Pro</span>)}
                   </div>
                   <div className="offer__description">
                     <p className="offer__text">{currentOffer?.description}</p>

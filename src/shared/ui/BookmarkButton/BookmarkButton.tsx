@@ -21,6 +21,7 @@ const BookmarkButton: FC<IBookmarkButton> = (props) => {
       )}
       type="button"
       onClick={() => onClick?.()}
+      data-testid="bookmarkbutton"
     >
       <svg className="place-card__bookmark-icon" width="18" height="19">
         <use xlinkHref="#icon-bookmark"></use>

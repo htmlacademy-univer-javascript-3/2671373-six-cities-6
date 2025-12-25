@@ -19,7 +19,10 @@ const Reviews: FC<IReviews> = memo((props: IReviews) => {
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
       <LoadingWrapper isLoading={isLoading}>
-        <ul className="reviews__list">
+        <ul
+          data-testid="reviews-list"
+          className="reviews__list"
+        >
           {comments.map((comment) => (
             <CommentOffer comment={comment} key={comment.id}/>
           ))}

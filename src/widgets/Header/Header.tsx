@@ -8,7 +8,7 @@ import {State} from '@/shared/types';
 import {useAppDispatch} from '@/shared/hooks';
 
 const HeaderNavNotLogged = () => (
-  <nav className="header__nav">
+  <nav className="header__nav" data-testid="header-not-logged">
     <ul className="header__nav-list">
       <li className="header__nav-item user">
         <Link className="header__nav-link header__nav-link--profile" to='/login'>
@@ -37,7 +37,7 @@ const HeaderNavLogged = () => {
   const favoritesCount = useMemo(() => Object.values(favorites).flat(1).length, [favorites]);
 
   return (
-    <nav className="header__nav">
+    <nav className="header__nav" data-testid="header-logged">
       <ul className="header__nav-list">
         <li className="header__nav-item user">
           <Link className="header__nav-link header__nav-link--profile" to='/favorites'>
@@ -45,7 +45,7 @@ const HeaderNavLogged = () => {
               <img src={profile?.avatarUrl} alt="avatar" className="user__avatar"/>
             </div>
             <span className="header__user-name user__name">{profile?.email}</span>
-            <span className="header__favorite-count">{favoritesCount}</span>
+            <span className="header__favorite-count" data-testid="header-favorites-count">{favoritesCount}</span>
           </Link>
         </li>
         <li className="header__nav-item">

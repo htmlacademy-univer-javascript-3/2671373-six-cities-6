@@ -36,7 +36,7 @@ describe('Application routing', () => {
     render(component);
 
     await waitFor(() => {
-      expect(screen.getByTestId('offer-name')).toBeInTheDocument();
+      expect(screen.getByTestId('offer-card-name')).toBeInTheDocument();
     }, {timeout: 3000});
 
   });
@@ -85,7 +85,7 @@ describe('Application routing', () => {
 
   });
 
-  it('should Offers  when authorized user navigates to "/login"', async () => {
+  it('should render Offers  when authorized user navigates to "/login"', async () => {
     const {component} = withStore(<MockMemoryRouter initialEntries={['/login']}/>, {
       auth: {authorizationStatus: true, isLoading: false},
       offers: {offers: {}, isLoading: false},
@@ -98,5 +98,16 @@ describe('Application routing', () => {
       expect(screen.getByText('Cities')).toBeInTheDocument();
     }, {timeout: 3000});
 
+  });
+
+  it('should render 404 when user navigates to unknown route', async () => {
+    const {component} = withStore(<MockMemoryRouter initialEntries={['/unknown-unknown']}/>, {
+      auth: {authorizationStatus: false, isLoading: false},
+    });
+    render(component);
+
+    await waitFor(() => {
+      expect(screen.getByText('404 Not Found')).toBeInTheDocument();
+    }, {timeout: 3000});
   });
 });
