@@ -1,4 +1,4 @@
-import { lorem, name, image, datatype, address } from 'faker';
+import { lorem, name, image, datatype, address, internet } from 'faker';
 import {Action, ThunkDispatch} from '@reduxjs/toolkit';
 import {State} from '@/shared/types';
 import {createApi} from '@/shared/services';
@@ -6,6 +6,7 @@ import {TComment} from '@/shared/model/comment';
 import {nanoid} from 'nanoid';
 import {TUser} from '@/shared/model/user';
 import {EOfferType, TCity, TLocation, TOffer, TOfferCard, TOfferRating} from '@/shared/model/offer';
+import {TProfile} from '@/shared/model/auth';
 
 export type AppThunkDispatch = ThunkDispatch<State, ReturnType<typeof createApi>, Action>;
 
@@ -77,4 +78,12 @@ export const makeFakeOfferCard = (): TOfferCard => ({
   isPremium: datatype.boolean(),
   location: makeFakeLocation(),
   maxAdults: datatype.number(5),
+});
+
+export const makeFakeProfile = (): TProfile => ({
+  name: name.firstName(),
+  avatarUrl: image.avatar(),
+  isPro: datatype.boolean(),
+  email: internet.email(),
+  token: 'token'
 });

@@ -19,7 +19,10 @@ const NearOffers: FC<INearOffers> = memo((props: INearOffers) => {
       <section className="near-places places">
         <h2 className="near-places__title">Other places in the neighbourhood</h2>
         <LoadingWrapper isLoading={isLoading}>
-          <div className="near-places__list places__list">
+          <div
+            data-testid="offers-list"
+            className="near-places__list places__list"
+          >
             <OffersList
               offers={offers}
               changeFavoriteStatus={changeOfferFavoriteStatus}

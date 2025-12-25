@@ -47,8 +47,10 @@ const LoginPage: FC = () => {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-            <form onSubmit={handleSubmit(submitHandler)}
+            <form
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onSubmit={handleSubmit(submitHandler)}
+              data-testid="login-form"
               className="login__form form"
               action="#"
               method="post"
@@ -57,6 +59,7 @@ const LoginPage: FC = () => {
                 <label className="visually-hidden">E-mail</label>
                 <input
                   {...register('email')}
+                  data-testid="login-form-email"
                   className="login__input form__input"
                   type="email"
                   placeholder="Email"
@@ -68,6 +71,7 @@ const LoginPage: FC = () => {
                 <label className="visually-hidden">Password</label>
                 <input
                   {...register('password')}
+                  data-testid="login-form-password"
                   className="login__input form__input"
                   type="password"
                   placeholder="Password"
@@ -75,7 +79,13 @@ const LoginPage: FC = () => {
                 />
                 {errors['password'] && <p>{errors['password']}</p>}
               </div>
-              <button className="login__submit form__submit button" type="submit">Sign in</button>
+              <button
+                className="login__submit form__submit button"
+                type="submit"
+                data-testid="login-form-submit"
+              >
+                Sign in
+              </button>
             </form>
           </section>
           <section className="locations locations--login locations--current">

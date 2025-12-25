@@ -104,7 +104,10 @@ const MainPage: FC = () => {
                     setSorting={setOfferSorting}
                     options={sortingOptions}
                   />
-                  <div className="cities__places-list places__list tabs__content">
+                  <div
+                    data-testid="offers-list"
+                    className="cities__places-list places__list tabs__content"
+                  >
                     <OffersList
                       offers={sortedOffers}
                       changeFavoriteStatus={handleChangeOfferFavoriteStatus}
@@ -113,7 +116,10 @@ const MainPage: FC = () => {
                   </div>
                 </section>
               )}
-              <div className="cities__right-section">
+              <div
+                className="cities__right-section"
+                data-testid="offers-map"
+              >
                 <Map
                   city={citiesCoords[activeCity]}
                   points={offerLocations}

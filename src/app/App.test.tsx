@@ -36,7 +36,7 @@ describe('Application routing', () => {
     render(component);
 
     await waitFor(() => {
-      expect(screen.getByTestId('offer-name')).toBeInTheDocument();
+      expect(screen.getByTestId('offer-card-name')).toBeInTheDocument();
     }, {timeout: 3000});
 
   });
