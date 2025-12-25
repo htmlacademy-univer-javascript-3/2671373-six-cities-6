@@ -32,7 +32,10 @@ const FavoritesPage: FC = () => {
             <h1 className="favorites__title">Saved listing</h1>
             <LoadingWrapper isLoading={isLoading}>
               {isPageEmpty ? (
-                <div className="favorites__status-wrapper">
+                <div
+                  data-testid="favorites-empty"
+                  className="favorites__status-wrapper"
+                >
                   <b className="favorites__status">Nothing yet saved.</b>
                   <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
                 </div>
@@ -47,7 +50,10 @@ const FavoritesPage: FC = () => {
                           </a>
                         </div>
                       </div>
-                      <div className="cities__places-list places__list tabs__content">
+                      <div
+                        data-testid="favorites-offers-list"
+                        className="cities__places-list places__list tabs__content"
+                      >
                         <OffersList
                           offers={offers}
                           changeFavoriteStatus={handleChangeOfferFavoriteStatus}
