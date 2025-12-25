@@ -26,7 +26,6 @@ function useMap(
       },
       zoom: 9,
       attributionControl: true,
-      // crs: L.CRS.Simple
     });
 
     mapRef.current = map;

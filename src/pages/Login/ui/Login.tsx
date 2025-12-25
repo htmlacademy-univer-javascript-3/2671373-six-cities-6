@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, FormEventHandler, useState} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {login} from '@/shared/store';
 import {useNavigate} from 'react-router-dom';
@@ -23,21 +23,24 @@ const LoginPage: FC = () => {
     }
   });
 
-  const submitHandler: SubmitHandler<TLoginData> = (values) => {
-    dispatch(login(values)).then((r) => {
-      const payload = r.payload as AxiosResponse;
-      if ('status' in payload) {
-        const errorData = payload.data as {details: {messages: string[]; property: string; value: string}[]};
-        const fieldErrors: Record<string, string> = errorData.details.reduce((acc, curr) => {
-          acc[curr.property] = curr.messages[0];
-          return acc;
-        }, {} as Record<string, string>);
-        setErrors(fieldErrors);
-        return;
+  const submitHandler: SubmitHandler<TLoginData> = async (values) => {
+    const r = await dispatch(login(values));
+    const payload = r.payload as AxiosResponse;
+    if ('status' in payload) {
+      const errorData = payload.data as { details: { messages: string[]; property: string; value: string }[] };
+      const fieldErrors: Record<string, string> = errorData.details.reduce((acc, curr) => {
+        acc[curr.property] = curr.messages[0];
+        return acc;
+      }, {} as Record<string, string>);
+      setErrors(fieldErrors);
+      return;
 
-      }
-      navigate('/');
-    });
+    }
+    navigate('/');
+  };
+
+  const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    handleSubmit(submitHandler)(event);
   };
 
   return (
@@ -48,8 +51,7 @@ const LoginPage: FC = () => {
           <section className="login">
             <h1 className="login__title">Sign in</h1>
             <form
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              onSubmit={handleSubmit(submitHandler)}
+              onSubmit={onSubmit}
               data-testid="login-form"
               className="login__form form"
               action="#"

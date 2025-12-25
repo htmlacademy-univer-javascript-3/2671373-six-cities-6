@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import {FC, FormEventHandler, memo} from 'react';
 import {RatingInput} from '@/shared/ui/RatingInput';
 import {SubmitHandler, useForm} from 'react-hook-form';
 
@@ -28,12 +28,15 @@ const AddReviewForm: FC<IAddReviewForm> = memo((props: IAddReviewForm) => {
     sendComment(values.comment, values.rating);
   };
 
+  const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    handleSubmit(submitHandler)(event);
+  };
+
   return (
     <form
       data-testid="review-form"
       className="reviews__form form"
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onSubmit={handleSubmit(submitHandler)}
+      onSubmit={onSubmit}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <RatingInput
