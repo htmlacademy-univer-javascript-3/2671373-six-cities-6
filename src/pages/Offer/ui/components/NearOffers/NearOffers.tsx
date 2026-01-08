@@ -6,13 +6,13 @@ import {TOffer} from '@/shared/model/offer';
 interface INearOffers {
   offers: TOffer[];
   isLoading: boolean;
-  changeOfferFavoriteStatus: (id: string, favorite: boolean) => Promise<void>;
-  selectOffer?: (offer?: TOffer) => void;
+  onChangeOfferFavoriteStatus: (id: string, favorite: boolean) => Promise<void>;
+  onSelectOffer?: (offer?: TOffer) => void;
 }
 
 const NearOffers: FC<INearOffers> = memo((props: INearOffers) => {
 
-  const { changeOfferFavoriteStatus, offers, isLoading, selectOffer } = props;
+  const { onChangeOfferFavoriteStatus, offers, isLoading, onSelectOffer } = props;
 
   return (
     <div className="container">
@@ -25,8 +25,8 @@ const NearOffers: FC<INearOffers> = memo((props: INearOffers) => {
           >
             <OffersList
               offers={offers}
-              changeFavoriteStatus={changeOfferFavoriteStatus}
-              selectOffer={selectOffer}
+              onChangeFavoriteStatus={onChangeOfferFavoriteStatus}
+              onSelectOffer={onSelectOffer}
             />
           </div>
         </LoadingWrapper>

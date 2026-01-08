@@ -56,7 +56,7 @@ const FavoritesPage: FC = () => {
                       >
                         <OffersList
                           offers={offers}
-                          changeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                          onChangeFavoriteStatus={handleChangeOfferFavoriteStatus}
                         />
                       </div>
                     </li>
