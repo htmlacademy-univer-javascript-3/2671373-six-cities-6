@@ -1,9 +1,10 @@
-import {FC, FormEventHandler, useState} from 'react';
+import {FC, FormEventHandler, useMemo, useState} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {login} from '@/shared/store';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {AxiosResponse} from 'axios';
 import {useAppDispatch} from '@/shared/hooks';
+import {cities} from '@/shared/mocks';
 
 type TLoginData = {
   email: string;
@@ -15,6 +16,11 @@ const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const randomCity = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * cities.length);
+    return cities[randomIndex];
+  }, []);
 
   const { handleSubmit, register } = useForm<TLoginData>({
     defaultValues: {
@@ -92,9 +98,9 @@ const LoginPage: FC = () => {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <Link className="locations__item-link" to={`/?city=${randomCity}`}>
+                <span>{randomCity}</span>
+              </Link>
             </div>
           </section>
         </div>
