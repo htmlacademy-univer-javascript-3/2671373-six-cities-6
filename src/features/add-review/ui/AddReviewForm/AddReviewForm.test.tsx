@@ -6,7 +6,7 @@ describe('feature: AddReviewForm', () => {
   const mockHandleSendComment = vi.fn();
 
   it('should render correctly', () => {
-    render(<AddReviewForm sendComment={mockHandleSendComment}/>);
+    render(<AddReviewForm onSendComment={mockHandleSendComment}/>);
 
     expect(screen.getByTestId('review-form')).toBeInTheDocument();
     expect(screen.getByTestId('review-form-textarea')).toBeInTheDocument();
@@ -15,7 +15,7 @@ describe('feature: AddReviewForm', () => {
 
   it('should call "sendComment" on submitting form', async () => {
     const mockTypedText = 'comment';
-    render(<AddReviewForm sendComment={mockHandleSendComment}/>);
+    render(<AddReviewForm onSendComment={mockHandleSendComment}/>);
 
     await userEvent.type(screen.getByTestId('review-form-textarea'), mockTypedText);
     await userEvent.click(screen.getByTestId('review-form-submit'));

@@ -3,7 +3,7 @@ import {RatingInput} from '@/shared/ui/RatingInput';
 import {SubmitHandler, useForm} from 'react-hook-form';
 
 interface IAddReviewForm {
-  sendComment: (comment: string, rating: number) => void;
+  onSendComment: (comment: string, rating: number) => void;
 }
 
 type TReviewValues = {
@@ -13,7 +13,7 @@ type TReviewValues = {
 
 const AddReviewForm: FC<IAddReviewForm> = memo((props: IAddReviewForm) => {
 
-  const { sendComment } = props;
+  const { onSendComment } = props;
   const {register, setValue, handleSubmit, watch} = useForm<TReviewValues>({
     defaultValues: {
       rating: 5,
@@ -25,7 +25,7 @@ const AddReviewForm: FC<IAddReviewForm> = memo((props: IAddReviewForm) => {
   const rating = watch('rating');
 
   const submitHandler: SubmitHandler<TReviewValues> = (values) => {
-    sendComment(values.comment, values.rating);
+    onSendComment(values.comment, values.rating);
   };
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {

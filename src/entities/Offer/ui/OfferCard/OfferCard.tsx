@@ -6,11 +6,11 @@ import {Rating} from '@/shared/ui/Rating';
 
 const OfferCard: FC<IOfferCard> = memo((props: IOfferCard) => {
 
-  const { offer, changeFavoriteStatus, selectOffer } = props;
+  const { offer, onChangeFavoriteStatus, onSelectOffer } = props;
   const [isFavorite, setFavorite] = useState(offer.isFavorite);
 
   const handleChangeFavorite = () => {
-    changeFavoriteStatus(offer.id, !isFavorite).then(() => {
+    onChangeFavoriteStatus(offer.id, !isFavorite).then(() => {
       setFavorite(!isFavorite);
     });
   };
@@ -19,8 +19,8 @@ const OfferCard: FC<IOfferCard> = memo((props: IOfferCard) => {
     <article
       data-testid="offer"
       className="cities__card place-card" id={offer.id}
-      onMouseEnter={() => selectOffer?.(offer)}
-      onMouseLeave={() => selectOffer?.(undefined)}
+      onMouseEnter={() => onSelectOffer?.(offer)}
+      onMouseLeave={() => onSelectOffer?.(undefined)}
     >
       {offer.isPremium && (
         <div

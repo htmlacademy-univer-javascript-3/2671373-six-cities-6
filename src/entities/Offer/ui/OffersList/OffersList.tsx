@@ -4,13 +4,13 @@ import {OfferCard} from '@/entities/Offer';
 
 interface IOffersList {
   offers: TOffer[];
-  selectOffer?: (offer?: TOffer) => void;
-  changeFavoriteStatus: (id: string, favorite: boolean) => Promise<void>;
+  onSelectOffer?: (offer?: TOffer) => void;
+  onChangeFavoriteStatus: (id: string, favorite: boolean) => Promise<void>;
 }
 
 
 const OffersList: FC<IOffersList> = memo((props: IOffersList) => {
-  const { offers, changeFavoriteStatus, selectOffer } = props;
+  const { offers, onChangeFavoriteStatus, onSelectOffer } = props;
 
   return (
     <>
@@ -18,8 +18,8 @@ const OffersList: FC<IOffersList> = memo((props: IOffersList) => {
         <OfferCard
           offer={offer}
           key={offer.id}
-          changeFavoriteStatus={changeFavoriteStatus}
-          selectOffer={selectOffer}
+          onChangeFavoriteStatus={onChangeFavoriteStatus}
+          onSelectOffer={onSelectOffer}
         />
       ))}
     </>

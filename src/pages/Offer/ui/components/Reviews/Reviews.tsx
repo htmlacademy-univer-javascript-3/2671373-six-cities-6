@@ -7,13 +7,13 @@ import {CommentOffer} from '@/entities/Comment/ui';
 interface IReviews {
   comments: TComment[];
   isLoading: boolean;
-  sendComment: (comment: string, rating: number) => void;
+  onSendComment: (comment: string, rating: number) => void;
   isAuthorized: boolean;
 }
 
 const Reviews: FC<IReviews> = memo((props: IReviews) => {
 
-  const { comments, isLoading, sendComment, isAuthorized } = props;
+  const { comments, isLoading, onSendComment, isAuthorized } = props;
 
   return (
     <section className="offer__reviews reviews">
@@ -28,7 +28,7 @@ const Reviews: FC<IReviews> = memo((props: IReviews) => {
           ))}
         </ul>
       </LoadingWrapper>
-      {isAuthorized && (<AddReviewForm sendComment={sendComment}/>)}
+      {isAuthorized && (<AddReviewForm onSendComment={onSendComment}/>)}
     </section>
   );
 });

@@ -11,7 +11,7 @@ describe('entity: OfferCard', () => {
     const {component} = withRouter(
       <OfferCard
         offer={mockOffer}
-        changeFavoriteStatus={mockHandleChangeFavorite}
+        onChangeFavoriteStatus={mockHandleChangeFavorite}
       />);
 
     render(component);
@@ -24,7 +24,7 @@ describe('entity: OfferCard', () => {
     const { rerender } = render(withRouter(
       <OfferCard
         offer={{...mockOffer, isPremium: true}}
-        changeFavoriteStatus={mockHandleChangeFavorite}
+        onChangeFavoriteStatus={mockHandleChangeFavorite}
       />).component);
 
     expect(screen.queryByTestId('offer-premium')).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('entity: OfferCard', () => {
     rerender(withRouter(
       <OfferCard
         offer={{...mockOffer, isPremium: false}}
-        changeFavoriteStatus={mockHandleChangeFavorite}
+        onChangeFavoriteStatus={mockHandleChangeFavorite}
       />).component);
 
     expect(screen.queryByTestId('offer-premium')).not.toBeInTheDocument();
@@ -42,7 +42,7 @@ describe('entity: OfferCard', () => {
     const {component} = withRouter(
       <OfferCard
         offer={mockOffer}
-        changeFavoriteStatus={mockHandleChangeFavorite}
+        onChangeFavoriteStatus={mockHandleChangeFavorite}
       />);
 
     render(component);

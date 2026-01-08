@@ -110,8 +110,8 @@ const MainPage: FC = () => {
                   >
                     <OffersList
                       offers={sortedOffers}
-                      changeFavoriteStatus={handleChangeOfferFavoriteStatus}
-                      selectOffer={handleSelectOffer}
+                      onChangeFavoriteStatus={handleChangeOfferFavoriteStatus}
+                      onSelectOffer={handleSelectOffer}
                     />
                   </div>
                 </section>

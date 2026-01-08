@@ -186,7 +186,7 @@ const OfferPage: FC = () => {
                   isAuthorized={authorizationStatus}
                   comments={comments}
                   isLoading={isCommentsLoading}
-                  sendComment={sendCommentHandler}
+                  onSendComment={sendCommentHandler}
                 />
               </div>
             </div>
@@ -203,8 +203,8 @@ const OfferPage: FC = () => {
           <NearOffers
             isLoading={isNearbyOffersLoading}
             offers={nearbyOffers}
-            changeOfferFavoriteStatus={changeOfferFavoriteStatusHandler}
-            selectOffer={handleSelectOffer}
+            onChangeOfferFavoriteStatus={changeOfferFavoriteStatusHandler}
+            onSelectOffer={handleSelectOffer}
           />
         </LoadingWrapper>
       </main>
